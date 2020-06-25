@@ -1,5 +1,6 @@
-Ppackage com.example.android.boomplacer
+package com.example.android.boomplacer
 
+import com.example.android.boomplacer.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
