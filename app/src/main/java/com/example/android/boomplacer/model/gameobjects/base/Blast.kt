@@ -1,10 +1,10 @@
-package com.example.android.boomplacer.gameobjects.base
+package com.example.android.boomplacer.model.gameobjects.base
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.example.android.boomplacer.extensions.dpToPx
 import com.example.android.boomplacer.game.ObjectManager
-import com.example.android.boomplacer.gameobjects.MovePattern
+import com.example.android.boomplacer.model.gameobjects.MovePattern
 import com.example.android.boomplacer.math.Vector2
 
 open class Blast protected constructor(

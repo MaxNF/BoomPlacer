@@ -1,8 +1,8 @@
-package com.example.android.boomplacer.gameobjects.factories
+package com.example.android.boomplacer.model.gameobjects.factories
 
 import android.content.res.Resources
-import com.example.android.boomplacer.gameobjects.base.Target
-import com.example.android.boomplacer.gameobjects.targets.LinearTarget
+import com.example.android.boomplacer.model.gameobjects.base.Target
+import com.example.android.boomplacer.model.gameobjects.targets.LinearTarget
 
 class TargetFactory(private val resources: Resources) {
     fun createLinearTargets(amount: Int): List<Target> {

@@ -12,6 +12,7 @@
         android:id="@+id/remaining_targets_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:src="@drawable/ic_target"
         app:layout_constraintEnd_toStartOf="@id/remaining_targets_value"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +36,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
+        android:src="@drawable/ic_bomb"
         app:layout_constraintEnd_toStartOf="@id/remaining_bombs_value"
         app:layout_constraintStart_toEndOf="@id/remaining_targets_value"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,6 +59,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
+        android:src="@android:color/holo_orange_dark"
         app:layout_constraintEnd_toStartOf="@id/score_value"
         app:layout_constraintStart_toEndOf="@id/remaining_bombs_value"
         app:layout_constraintTop_toTopOf="parent" />

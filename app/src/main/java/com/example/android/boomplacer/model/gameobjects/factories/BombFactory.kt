@@ -1,8 +1,8 @@
-package com.example.android.boomplacer.gameobjects.factories
+package com.example.android.boomplacer.model.gameobjects.factories
 
 import android.content.res.Resources
-import com.example.android.boomplacer.gameobjects.base.Bomb
-import com.example.android.boomplacer.gameobjects.bombs.StaticBomb
+import com.example.android.boomplacer.model.gameobjects.base.Bomb
+import com.example.android.boomplacer.model.gameobjects.bombs.StaticBomb
 
 class BombFactory(private val resources: Resources) {
 

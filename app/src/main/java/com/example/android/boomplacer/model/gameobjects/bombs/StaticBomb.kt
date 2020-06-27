@@ -1,13 +1,13 @@
-package com.example.android.boomplacer.gameobjects.bombs
+package com.example.android.boomplacer.model.gameobjects.bombs
 
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.example.android.boomplacer.R
-import com.example.android.boomplacer.gameobjects.MovePattern
-import com.example.android.boomplacer.gameobjects.base.Blast
-import com.example.android.boomplacer.gameobjects.base.Bomb
-import com.example.android.boomplacer.gameobjects.blasts.StaticBlast
+import com.example.android.boomplacer.model.gameobjects.MovePattern
+import com.example.android.boomplacer.model.gameobjects.base.Blast
+import com.example.android.boomplacer.model.gameobjects.base.Bomb
+import com.example.android.boomplacer.model.gameobjects.blasts.StaticBlast
 import com.example.android.boomplacer.math.Vector2
 
 class StaticBomb(

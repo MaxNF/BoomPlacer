@@ -6,20 +6,31 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android.boomplacer.gameobjects.base.Bomb
-import com.example.android.boomplacer.gameobjects.GameState
-import com.example.android.boomplacer.gameobjects.base.Target
+import com.example.android.boomplacer.model.Event
+import com.example.android.boomplacer.model.gameobjects.base.Bomb
+import com.example.android.boomplacer.model.gameobjects.GameState
+import com.example.android.boomplacer.model.gameobjects.base.Target
 
-class GameView(context: Context, private val objectManager: ObjectManager) : SurfaceView(context) {
+class GameView(
+    context: Context,
+    private val objectManager: ObjectManager,
+    private val scoreManager: ScoreManager
+) : SurfaceView(context) {
     private lateinit var gameLoop: GameLoop
     var targetFramerate: Int = 60
     var showFramerate = false
 
-    private val _gameFinished: MutableLiveData<GameState> = MutableLiveData()
-    val gameFinished: LiveData<GameState> = _gameFinished
+    private val _gameFinished: MutableLiveData<Event<GameState>> = MutableLiveData()
+    val gameFinished: LiveData<Event<GameState>> = _gameFinished
 
-    private val _scoreIncrease: MutableLiveData<Int> = MutableLiveData()
-    val scoreIncrease: LiveData<Int> = _scoreIncrease
+    private val _scoreRefreshed: MutableLiveData<Event<Int>> = MutableLiveData()
+    val scoreRefreshed: LiveData<Event<Int>> = _scoreRefreshed
+
+    private val _targetsRefreshed: MutableLiveData<Event<Int>> = MutableLiveData()
+    val targetsRefreshed: LiveData<Event<Int>> = _targetsRefreshed
+
+    private val _bombsRefreshed: MutableLiveData<Event<Int>> = MutableLiveData()
+    val bombsRefreshed: LiveData<Event<Int>> = _bombsRefreshed
 
 
     fun startGame() {
@@ -54,8 +65,13 @@ class GameView(context: Context, private val objectManager: ObjectManager) : Sur
         if (::gameLoop.isInitialized && gameLoop.running) stopGame()
         gameLoop = GameLoop(this)
         objectManager.clearAll()
+        scoreManager.clearScore()
         objectManager.addPendingTargets(targets)
         objectManager.addInventoryBombs(bombs)
+
+        _bombsRefreshed.postValue(Event(objectManager.inventoryBombsCount()))
+        _targetsRefreshed.postValue(Event(objectManager.pendingTargetsCount()))
+        _scoreRefreshed.postValue(Event(scoreManager.currentScore))
     }
 
     fun updateGameState(oneFrameMillis: Long) {
@@ -94,13 +110,18 @@ class GameView(context: Context, private val objectManager: ObjectManager) : Sur
         val iterator = objectManager.placedTargets.iterator()
         while (iterator.hasNext()) {
             val target = iterator.next()
-            if (target.updateState(width, height, secondsElapsed, objectManager)) {
+            val isDestroyed = target.updateState(width, height, secondsElapsed, objectManager)
+            if (isDestroyed) {
                 iterator.remove()
+                scoreManager.increaseScore(target)
+                _scoreRefreshed.postValue(Event(scoreManager.currentScore))
             }
         }
 
         if (objectManager.placedTargets.isEmpty()) {
-            objectManager.placeTarget()
+            if (objectManager.placeTarget()) {
+                _targetsRefreshed.postValue(Event(objectManager.pendingTargetsCount()))
+            }
         }
     }
 
@@ -118,8 +139,11 @@ class GameView(context: Context, private val objectManager: ObjectManager) : Sur
     }
 
     private fun endGame(gameState: GameState) {
+        if (gameState == GameState.WIN_TARGETS_DESTROYED) {
+            scoreManager.increaseScore(objectManager.inventoryBombs)
+        }
         stopGame()
-        _gameFinished.postValue(gameState)
+        _gameFinished.postValue(Event(gameState))
     }
 
     fun draw() {
@@ -135,7 +159,9 @@ class GameView(context: Context, private val objectManager: ObjectManager) : Sur
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
-            objectManager.placeBomb(event.x, event.y)
+            if (objectManager.placeBomb(event.x, event.y)) {
+                _bombsRefreshed.postValue(Event(objectManager.inventoryBombsCount()))
+            }
         }
         return true
     }

@@ -1,4 +1,4 @@
-package com.example.android.boomplacer.gameobjects
+package com.example.android.boomplacer.model.gameobjects
 
 import com.example.android.boomplacer.math.Vector2
 

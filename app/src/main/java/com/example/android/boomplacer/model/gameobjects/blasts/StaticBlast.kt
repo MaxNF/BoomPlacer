@@ -1,9 +1,9 @@
-package com.example.android.boomplacer.gameobjects.blasts
+package com.example.android.boomplacer.model.gameobjects.blasts
 
 import android.graphics.Color
 import android.graphics.Paint
-import com.example.android.boomplacer.gameobjects.MovePattern
-import com.example.android.boomplacer.gameobjects.base.Blast
+import com.example.android.boomplacer.model.gameobjects.MovePattern
+import com.example.android.boomplacer.model.gameobjects.base.Blast
 import com.example.android.boomplacer.math.Vector2
 
 class StaticBlast(

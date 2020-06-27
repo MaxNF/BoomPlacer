@@ -1,8 +1,8 @@
 package com.example.android.boomplacer.game
 
-import com.example.android.boomplacer.gameobjects.base.Blast
-import com.example.android.boomplacer.gameobjects.base.Bomb
-import com.example.android.boomplacer.gameobjects.base.Target
+import com.example.android.boomplacer.model.gameobjects.base.Blast
+import com.example.android.boomplacer.model.gameobjects.base.Bomb
+import com.example.android.boomplacer.model.gameobjects.base.Target
 import java.util.*
 
 class ObjectManager {
@@ -33,6 +33,9 @@ class ObjectManager {
         clearScreen()
     }
 
+    /**
+     * @return true - if target has been placed, false - otherwise
+     * */
     fun placeTarget(): Boolean {
         return if (pendingTargets.isNotEmpty()) {
             placedTargets.add(pendingTargets.pop())
@@ -48,6 +51,9 @@ class ObjectManager {
         placedBlasts.add(blast)
     }
 
+    /**
+     * @return true - if bomb has been placed, false - otherwise
+     * */
     fun placeBomb(x: Float, y: Float): Boolean {
         return if (inventoryBombs.isNotEmpty()) {
             val bomb = inventoryBombs.pop()
@@ -67,4 +73,8 @@ class ObjectManager {
     fun addInventoryBombs(bombs: Iterable<Bomb>) {
         inventoryBombs.addAll(bombs)
     }
+
+    fun pendingTargetsCount() = pendingTargets.size
+
+    fun inventoryBombsCount() = inventoryBombs.size
 }
