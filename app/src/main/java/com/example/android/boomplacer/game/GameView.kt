@@ -18,6 +18,9 @@ class GameView(context: Context, private val objectManager: ObjectManager) : Sur
     private val _gameFinished: MutableLiveData<GameState> = MutableLiveData()
     val gameFinished: LiveData<GameState> = _gameFinished
 
+    private val _scoreIncrease: MutableLiveData<Int> = MutableLiveData()
+    val scoreIncrease: LiveData<Int> = _scoreIncrease
+
 
     fun startGame() {
         if (::gameLoop.isInitialized) {

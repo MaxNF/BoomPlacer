@@ -1,19 +1,14 @@
 package com.example.android.boomplacer
 
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.example.android.boomplacer.gameobjects.base.Target
-import com.example.android.boomplacer.math.Vector2
 import com.example.android.boomplacer.game.GameView
 import com.example.android.boomplacer.game.ObjectManager
 import com.example.android.boomplacer.gameobjects.GameState
-import com.example.android.boomplacer.gameobjects.base.Blast
-import com.example.android.boomplacer.gameobjects.base.Bomb
 import com.example.android.boomplacer.gameobjects.factories.BombFactory
 import com.example.android.boomplacer.gameobjects.factories.TargetFactory
 import java.lang.UnsupportedOperationException
@@ -39,18 +34,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpListeners() {
-        findViewById<Button>(R.id.button_new_game).setOnClickListener {
-            startNewGame()
+        findViewById<ImageButton>(R.id.button_menu).setOnClickListener {
+            game.pauseGame()
+            launchMenu()
         }
-        findViewById<Button>(R.id.button_pause).setOnClickListener {
-            if (game.isPaused()) {
-                game.unPauseGame()
-                (it as Button).text = "Pause"
-            } else {
-                game.pauseGame()
-                (it as Button).text = "Resume"
-            }
-        }
+//        findViewById<Button>(R.id.button_new_game).setOnClickListener {
+//            startNewGame()
+//        }
+//        findViewById<Button>(R.id.button_pause).setOnClickListener {
+//            if (game.isPaused()) {
+//                game.unPauseGame()
+//                (it as Button).text = "Pause"
+//            } else {
+//                game.pauseGame()
+//                (it as Button).text = "Resume"
+//            }
+//        }
+    }
+
+    private fun launchMenu() {
+
     }
 
     private fun subscribeToEvents() {
