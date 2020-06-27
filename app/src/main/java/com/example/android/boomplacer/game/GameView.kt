@@ -4,26 +4,25 @@ import android.content.Context
 import android.graphics.Color
 import android.view.MotionEvent
 import android.view.SurfaceView
-import com.example.android.boomplacer.gameobjects.Blast
-import com.example.android.boomplacer.gameobjects.Bomb
-import com.example.android.boomplacer.gameobjects.Target
-import java.util.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.android.boomplacer.gameobjects.base.Bomb
+import com.example.android.boomplacer.gameobjects.GameState
+import com.example.android.boomplacer.gameobjects.base.Target
 
-class GameView(context: Context) : SurfaceView(context) {
+class GameView(context: Context, private val objectManager: ObjectManager) : SurfaceView(context) {
     private lateinit var gameLoop: GameLoop
-    private val placedTargets = mutableListOf<Target>()
-    private val placedBombs = mutableListOf<Bomb>()
-    private val placedBlasts = mutableListOf<Blast>()
-    private val targets = LinkedList<Target>()
-    private val bombs = LinkedList<Bomb>()
     var targetFramerate: Int = 60
     var showFramerate = false
+
+    private val _gameFinished: MutableLiveData<GameState> = MutableLiveData()
+    val gameFinished: LiveData<GameState> = _gameFinished
 
 
     fun startGame() {
         if (::gameLoop.isInitialized) {
             gameLoop.running = true
-            placeTarget()
+            objectManager.placeTarget()
             gameLoop.start()
         }
     }
@@ -51,30 +50,9 @@ class GameView(context: Context) : SurfaceView(context) {
     fun initNewGame(targets: List<Target>, bombs: List<Bomb>) {
         if (::gameLoop.isInitialized && gameLoop.running) stopGame()
         gameLoop = GameLoop(this)
-        placedTargets.clear()
-        this.targets.addAll(targets)
-        this.bombs.addAll(bombs)
-    }
-
-    private fun placeBomb(x: Float, y: Float) {
-        if (bombs.isNotEmpty()) {
-            val bomb = bombs.pop()
-            bomb.position.x = x
-            bomb.position.y = y
-            placedBombs.add(bomb)
-        }
-    }
-
-    private fun placeTarget() {
-        if (targets.isNotEmpty()) {
-            placedTargets.add(targets.pop())
-        }
-    }
-
-    private fun placeBlast(bomb: Bomb) {
-        val blast = bomb.blast
-        blast.position = bomb.position
-        placedBlasts.add(blast)
+        objectManager.clearAll()
+        objectManager.addPendingTargets(targets)
+        objectManager.addInventoryBombs(bombs)
     }
 
     fun updateGameState(oneFrameMillis: Long) {
@@ -82,53 +60,79 @@ class GameView(context: Context) : SurfaceView(context) {
         updateBombsState(secondsElapsed)
         updateBlastsState(secondsElapsed)
         updateTargetsState(secondsElapsed)
+
+        val gameState = calculateGameState()
+        if (gameState != GameState.RUNNING) {
+            endGame(gameState)
+        }
     }
 
     private fun updateBombsState(secondsElapsed: Float) {
-        val iterator = placedBombs.iterator()
+        val iterator = objectManager.placedBombs.iterator()
         while (iterator.hasNext()) {
             val bomb = iterator.next()
-            if (!bomb.updateState(width, height, secondsElapsed)) {
-                placeBlast(bomb)
+            if (bomb.updateState(width, height, secondsElapsed, objectManager)) {
                 iterator.remove()
             }
         }
     }
 
     private fun updateBlastsState(secondsElapsed: Float) {
-        val iterator = placedBlasts.iterator()
+        val iterator = objectManager.placedBlasts.iterator()
         while (iterator.hasNext()) {
             val blast = iterator.next()
-            if (!blast.updateState(width, height, secondsElapsed)) {
+            if (blast.updateState(width, height, secondsElapsed, objectManager)) {
                 iterator.remove()
             }
         }
     }
 
     private fun updateTargetsState(secondsElapsed: Float) {
-        val iterator = placedTargets.iterator()
+        val iterator = objectManager.placedTargets.iterator()
         while (iterator.hasNext()) {
             val target = iterator.next()
-            if (!target.updateState(width, height, secondsElapsed)) {
+            if (target.updateState(width, height, secondsElapsed, objectManager)) {
                 iterator.remove()
             }
         }
+
+        if (objectManager.placedTargets.isEmpty()) {
+            objectManager.placeTarget()
+        }
+    }
+
+    private fun calculateGameState(): GameState {
+        val anyTargetsLeft =
+            objectManager.pendingTargets.isNotEmpty() || objectManager.placedTargets.isNotEmpty()
+        val anyBombsLeft =
+            objectManager.inventoryBombs.isNotEmpty() || objectManager.placedBombs.isNotEmpty()
+        val anyBlastsProceed = objectManager.placedBlasts.isNotEmpty()
+        return when {
+            anyTargetsLeft && !anyBombsLeft && !anyBlastsProceed -> GameState.LOSE_NO_BOMBS_LEFT
+            !anyTargetsLeft -> GameState.WIN_TARGETS_DESTROYED
+            else -> GameState.RUNNING
+        }
+    }
+
+    private fun endGame(gameState: GameState) {
+        stopGame()
+        _gameFinished.postValue(gameState)
     }
 
     fun draw() {
         if (holder.surface.isValid) {
             val canvas = holder.lockCanvas()
             canvas.drawColor(Color.LTGRAY)
-            placedBombs.forEach { it.draw(canvas) }
-            placedBlasts.forEach { it.draw(canvas) }
-            placedTargets.forEach { it.draw(canvas) }
+            objectManager.placedBombs.forEach { it.draw(canvas) }
+            objectManager.placedBlasts.forEach { it.draw(canvas) }
+            objectManager.placedTargets.forEach { it.draw(canvas) }
             holder.unlockCanvasAndPost(canvas)
         }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
-            placeBomb(event.x, event.y)
+            objectManager.placeBomb(event.x, event.y)
         }
         return true
     }

@@ -1,17 +1,22 @@
 package com.example.android.boomplacer
 
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.FrameLayout
-import com.example.android.boomplacer.gameobjects.Target
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import com.example.android.boomplacer.gameobjects.base.Target
 import com.example.android.boomplacer.math.Vector2
 import com.example.android.boomplacer.game.GameView
-import com.example.android.boomplacer.gameobjects.Blast
-import com.example.android.boomplacer.gameobjects.Bomb
+import com.example.android.boomplacer.game.ObjectManager
+import com.example.android.boomplacer.gameobjects.GameState
+import com.example.android.boomplacer.gameobjects.base.Blast
+import com.example.android.boomplacer.gameobjects.base.Bomb
+import com.example.android.boomplacer.gameobjects.factories.BombFactory
+import com.example.android.boomplacer.gameobjects.factories.TargetFactory
+import java.lang.UnsupportedOperationException
 
 class MainActivity : AppCompatActivity() {
     private lateinit var game: GameView
@@ -20,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        game = GameView(this)
+        game = GameView(this, ObjectManager())
         val container = findViewById<FrameLayout>(R.id.game_container)
         val params = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
@@ -30,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         game.showFramerate = true
         setUpListeners()
+        subscribeToEvents()
     }
 
     private fun setUpListeners() {
@@ -47,22 +53,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun subscribeToEvents() {
+        game.gameFinished.observe(this, Observer { gameState ->
+            when (gameState) {
+                GameState.WIN_TARGETS_DESTROYED -> Toast.makeText(
+                    this,
+                    "YOU WIN!",
+                    Toast.LENGTH_LONG
+                ).show()
+                GameState.LOSE_NO_BOMBS_LEFT -> Toast.makeText(
+                    this,
+                    "YOU LOSE! NO MORE BOMBS LEFT.",
+                    Toast.LENGTH_LONG
+                ).show()
+                GameState.LOSE_TIME_OVER -> Toast.makeText(
+                    this,
+                    "YOU LOSE! TIME IS OVER",
+                    Toast.LENGTH_LONG
+                ).show()
+                else -> throw UnsupportedOperationException("Unsupported game state")
+            }
+        })
+    }
+
     private fun startNewGame() {
-        val targets = listOf(
-            Target.simpleLinearTarget(
-                BitmapFactory.decodeResource(resources, R.drawable.ic_star), Vector2(50f, 50f)
-            )
-        )
-        val bombs = listOf(
-            Bomb.simpleStaticBomb(
-                BitmapFactory.decodeResource(resources, R.drawable.ic_bomb),
-                Blast.simpleStaticBlast(Paint().apply {
-                    color = Color.RED
-                    alpha = 80
-                })
-            )
-        )
-        game.initNewGame(targets, bombs)
+        val targetFactory = TargetFactory(resources)
+        val bombFactory = BombFactory(resources)
+        game.initNewGame(targetFactory.createLinearTargets(3), bombFactory.createStaticBombs(5))
         game.startGame()
     }
 }
