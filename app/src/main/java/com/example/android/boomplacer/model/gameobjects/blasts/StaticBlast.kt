@@ -9,12 +9,12 @@ import com.example.android.boomplacer.model.gameobjects.movepatterns.StaticMoveP
 
 class StaticBlast(
     paint: Paint,
-    radius: Float,
-    radiusDecreaseRate: Float,
-    velocity: Vector2,
-    position: Vector2,
+    radiusDp: Float,
+    radiusDecreaseRateDp: Float,
+    velocityDp: Vector2,
+    positionPx: Vector2,
     movePattern: MovePattern
-) : Blast(paint, radius, radiusDecreaseRate, velocity, position, movePattern) {
+) : Blast(paint, radiusDp, radiusDecreaseRateDp, velocityDp, positionPx, movePattern) {
     companion object {
         fun create(): StaticBlast {
             val paint = Paint().apply {

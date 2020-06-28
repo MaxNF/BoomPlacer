@@ -14,17 +14,17 @@ import com.example.android.boomplacer.model.gameobjects.movepatterns.StaticMoveP
 class StaticBomb(
     image: Bitmap,
     blast: Blast,
-    timeBeforeBlast: Float,
-    radius: Float,
-    velocity: Vector2,
-    position: Vector2,
+    timeBeforeBlastSec: Float,
+    radiusDp: Float,
+    velocityDp: Vector2,
+    positionPx: Vector2,
     movePattern: MovePattern
-) : Bomb(image, blast, timeBeforeBlast, radius, velocity, position, movePattern) {
+) : Bomb(image, blast, timeBeforeBlastSec, radiusDp, velocityDp, positionPx, movePattern) {
     companion object {
         fun create(resources: Resources) = StaticBomb(
             BitmapFactory.decodeResource(resources, R.drawable.ic_bomb),
             StaticBlast.create(),
-            0.5f,
+            1.0f,
             8f,
             Vector2.zero(),
             Vector2.zero(),

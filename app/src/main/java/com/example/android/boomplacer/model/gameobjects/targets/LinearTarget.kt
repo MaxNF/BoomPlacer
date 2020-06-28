@@ -11,18 +11,39 @@ import com.example.android.boomplacer.model.gameobjects.movepatterns.LinearMoveP
 
 class LinearTarget(
     image: Bitmap,
-    radius: Float,
-    velocity: Vector2,
-    position: Vector2,
-    movePattern: MovePattern
-) : Target(image, radius, velocity, position, movePattern) {
+    radiusDp: Float,
+    speedDp: Float,
+    fieldWidth: Int,
+    fieldHeight: Int,
+    movePattern: MovePattern,
+    radiusModifierDp: Float,
+    speedModifierDp: Float
+) : Target(
+    image,
+    radiusDp,
+    speedDp,
+    fieldWidth,
+    fieldHeight,
+    movePattern,
+    radiusModifierDp,
+    speedModifierDp
+) {
     companion object {
-        fun create(resources: Resources) = LinearTarget(
+        fun create(
+            resources: Resources,
+            fieldWidth: Int,
+            fieldHeight: Int,
+            radiusModifierDp: Float,
+            speedModifierDp: Float
+        ) = LinearTarget(
             BitmapFactory.decodeResource(resources, R.drawable.ic_target),
             16f,
-            Vector2(200f, 200f),
-            Vector2.zero(),
-            LinearMovePattern()
+            100f,
+            fieldWidth,
+            fieldHeight,
+            LinearMovePattern(),
+            radiusModifierDp,
+            speedModifierDp
         )
     }
 }

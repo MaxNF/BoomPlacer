@@ -12,13 +12,12 @@ abstract class GameObject protected constructor(
     bitmap: Bitmap?,
     radiusDp: Float,
     velocityDp: Vector2,
-    positionDp: Vector2,
+    var positionPx: Vector2,
     var movePattern: MovePattern
 ) {
     private val TAG = "GameObject"
     var radiusPx: Float = dpToPx(radiusDp)
     var velocityPx: Vector2 = Vector2(dpToPx(velocityDp.x), dpToPx(velocityDp.y))
-    var positionPx: Vector2 = Vector2(dpToPx(positionDp.x), dpToPx(positionDp.y))
 
     private val scaledBitmap: Bitmap? =
         bitmap?.scale((radiusPx * 2).toInt(), (radiusPx * 2).toInt())

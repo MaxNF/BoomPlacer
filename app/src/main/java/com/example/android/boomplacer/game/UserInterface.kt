@@ -110,11 +110,7 @@ class UserInterface(private val activity: Activity, private val gameFlow: GameFl
     }
 
     private fun startNewGame() {
-        val targetFactory = TargetFactory(activity.resources)
-        val bombFactory = BombFactory(activity.resources)
-        val targets = bombFactory.createStaticBombs(5)
-        val bombs = targetFactory.createLinearTargets(3)
-        gameFlow.initNewGame(bombs, targets)
+        gameFlow.initNewGame(10)
         gameFlow.startGame()
     }
 

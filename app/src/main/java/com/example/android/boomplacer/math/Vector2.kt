@@ -1,11 +1,17 @@
 package com.example.android.boomplacer.math
 
+import kotlin.math.cos
 import kotlin.math.pow
+import kotlin.math.sin
 import kotlin.math.sqrt
+import kotlin.random.Random
 
 class Vector2(var x: Float, var y: Float) {
     companion object {
         fun zero() = Vector2(0f, 0f)
+        fun create(angle: Float, speed: Float) = Vector2(speed * sin(angle), speed * cos(angle))
+        fun createRandom(maxX: Int, maxY: Int) =
+            Vector2(Random.nextInt(maxX).toFloat(), Random.nextInt(maxY).toFloat())
     }
 
     operator fun plus(vector2: Vector2): Vector2 {
