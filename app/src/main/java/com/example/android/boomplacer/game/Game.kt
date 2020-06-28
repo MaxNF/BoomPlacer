@@ -4,36 +4,26 @@ import android.content.Context
 import android.graphics.Color
 import android.view.MotionEvent
 import android.view.SurfaceView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.android.boomplacer.model.Event
 import com.example.android.boomplacer.model.gameobjects.base.Bomb
 import com.example.android.boomplacer.model.gameobjects.GameState
 import com.example.android.boomplacer.model.gameobjects.base.Target
+import java.lang.IllegalStateException
 
-class GameView(
+class Game(
     context: Context,
-    private val objectManager: ObjectManager,
-    private val scoreManager: ScoreManager
-) : SurfaceView(context) {
+    private val objectManager: ObjectManager
+) : SurfaceView(context), GameFlow {
     private lateinit var gameLoop: GameLoop
     var targetFramerate: Int = 60
     var showFramerate = false
 
-    private val _gameFinished: MutableLiveData<Event<GameState>> = MutableLiveData()
-    val gameFinished: LiveData<Event<GameState>> = _gameFinished
+    private lateinit var userInterface: UserInterface
 
-    private val _scoreRefreshed: MutableLiveData<Event<Int>> = MutableLiveData()
-    val scoreRefreshed: LiveData<Event<Int>> = _scoreRefreshed
+    fun attachUserInterface(userInterface: UserInterface) {
+        this.userInterface = userInterface
+    }
 
-    private val _targetsRefreshed: MutableLiveData<Event<Int>> = MutableLiveData()
-    val targetsRefreshed: LiveData<Event<Int>> = _targetsRefreshed
-
-    private val _bombsRefreshed: MutableLiveData<Event<Int>> = MutableLiveData()
-    val bombsRefreshed: LiveData<Event<Int>> = _bombsRefreshed
-
-
-    fun startGame() {
+    override fun startGame() {
         if (::gameLoop.isInitialized) {
             gameLoop.running = true
             objectManager.placeTarget()
@@ -41,37 +31,34 @@ class GameView(
         }
     }
 
-    fun stopGame() {
+    override fun stopGame() {
         if (::gameLoop.isInitialized) {
             gameLoop.running = false
         }
     }
 
-    fun pauseGame() {
+    override fun pauseGame() {
         if (::gameLoop.isInitialized) {
             gameLoop.paused = true
         }
     }
 
-    fun unPauseGame() {
+    override fun unPauseGame() {
         if (::gameLoop.isInitialized) {
             gameLoop.paused = false
         }
     }
 
-    fun isPaused() = gameLoop.paused
+    override fun isPaused() = gameLoop.paused
 
-    fun initNewGame(targets: List<Target>, bombs: List<Bomb>) {
+    override fun initNewGame(targets: List<Target>, bombs: List<Bomb>) {
         if (::gameLoop.isInitialized && gameLoop.running) stopGame()
         gameLoop = GameLoop(this)
-        objectManager.clearAll()
-        scoreManager.clearScore()
+        objectManager.reset()
+        userInterface.reset()
+
         objectManager.addPendingTargets(targets)
         objectManager.addInventoryBombs(bombs)
-
-        _bombsRefreshed.postValue(Event(objectManager.inventoryBombsCount()))
-        _targetsRefreshed.postValue(Event(objectManager.pendingTargetsCount()))
-        _scoreRefreshed.postValue(Event(scoreManager.currentScore))
     }
 
     fun updateGameState(oneFrameMillis: Long) {
@@ -79,12 +66,22 @@ class GameView(
         updateBombsState(secondsElapsed)
         updateBlastsState(secondsElapsed)
         updateTargetsState(secondsElapsed)
+        objectManager.calculateScore()
 
         val gameState = calculateGameState()
-        if (gameState != GameState.RUNNING) {
+        if (gameFinished(gameState)) {
             endGame(gameState)
         }
+
+        if (shouldPlaceNextTarget()) {
+            objectManager.placeTarget()
+        }
     }
+
+    private fun gameFinished(gameState: GameState) = gameState != GameState.RUNNING
+
+    private fun shouldPlaceNextTarget() =
+        objectManager.noBombsOrBlastsOnScreen && objectManager.noTargetsOnScreen
 
     private fun updateBombsState(secondsElapsed: Float) {
         val iterator = objectManager.placedBombs.iterator()
@@ -113,14 +110,7 @@ class GameView(
             val isDestroyed = target.updateState(width, height, secondsElapsed, objectManager)
             if (isDestroyed) {
                 iterator.remove()
-                scoreManager.increaseScore(target)
-                _scoreRefreshed.postValue(Event(scoreManager.currentScore))
-            }
-        }
-
-        if (objectManager.placedTargets.isEmpty()) {
-            if (objectManager.placeTarget()) {
-                _targetsRefreshed.postValue(Event(objectManager.pendingTargetsCount()))
+                objectManager.destroyedTargets.add(target)
             }
         }
     }
@@ -133,17 +123,23 @@ class GameView(
         val anyBlastsProceed = objectManager.placedBlasts.isNotEmpty()
         return when {
             anyTargetsLeft && !anyBombsLeft && !anyBlastsProceed -> GameState.LOSE_NO_BOMBS_LEFT
-            !anyTargetsLeft -> GameState.WIN_TARGETS_DESTROYED
+            !anyTargetsLeft && !anyBlastsProceed -> GameState.WIN_TARGETS_DESTROYED
             else -> GameState.RUNNING
         }
     }
 
     private fun endGame(gameState: GameState) {
-        if (gameState == GameState.WIN_TARGETS_DESTROYED) {
-            scoreManager.increaseScore(objectManager.inventoryBombs)
+        when (gameState) {
+            GameState.WIN_TARGETS_DESTROYED -> {
+                objectManager.calculateFinalScore()
+                userInterface.showWinView()
+            }
+            GameState.LOSE_NO_BOMBS_LEFT -> {
+                userInterface.showNoMoreBombsView()
+            }
+            else -> throw IllegalStateException("Unsupported game state for ending the game")
         }
         stopGame()
-        _gameFinished.postValue(Event(gameState))
     }
 
     fun draw() {
@@ -154,14 +150,18 @@ class GameView(
             objectManager.placedBlasts.forEach { it.draw(canvas) }
             objectManager.placedTargets.forEach { it.draw(canvas) }
             holder.unlockCanvasAndPost(canvas)
+
+            userInterface.updateUi(
+                objectManager.score,
+                objectManager.inventoryBombsCount,
+                objectManager.targetsCount
+            )
         }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            if (objectManager.placeBomb(event.x, event.y)) {
-                _bombsRefreshed.postValue(Event(objectManager.inventoryBombsCount()))
-            }
+        if (event.action == MotionEvent.ACTION_DOWN && objectManager.noBombsOrBlastsOnScreen) {
+            objectManager.placeBomb(event.x, event.y)
         }
         return true
     }

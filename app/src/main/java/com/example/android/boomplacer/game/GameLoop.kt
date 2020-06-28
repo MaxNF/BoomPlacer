@@ -2,7 +2,7 @@ package com.example.android.boomplacer.game
 
 import android.util.Log
 
-class GameLoop(private val gameView: GameView) : Thread() {
+class GameLoop(private val game: Game) : Thread() {
     private val TAG = "GameLoop"
     var running: Boolean = false
     var paused: Boolean = false
@@ -13,7 +13,7 @@ class GameLoop(private val gameView: GameView) : Thread() {
     override fun run() {
         var startTimeNano: Long
         var differenceTimeMillis: Long
-        var oneFrameMillis: Long = 1000L / gameView.targetFramerate
+        var oneFrameMillis: Long = 1000L / game.targetFramerate
         var waitTimeMillis: Long
 
         while (running) {
@@ -22,8 +22,8 @@ class GameLoop(private val gameView: GameView) : Thread() {
             }
             startTimeNano = System.nanoTime()
 
-            gameView.updateGameState(oneFrameMillis)
-            gameView.draw()
+            game.updateGameState(oneFrameMillis)
+            game.draw()
 
             differenceTimeMillis = (System.nanoTime() - startTimeNano) / 1000000
             waitTimeMillis = oneFrameMillis - differenceTimeMillis
@@ -31,7 +31,7 @@ class GameLoop(private val gameView: GameView) : Thread() {
                 sleep(waitTimeMillis)
             }
 
-            if (gameView.showFramerate) {
+            if (game.showFramerate) {
                 calculateAndPrintFramerate(startTimeNano)
             }
         }
@@ -41,7 +41,7 @@ class GameLoop(private val gameView: GameView) : Thread() {
     private fun calculateAndPrintFramerate(startTimeNano: Long) {
         totalTime += System.nanoTime() - startTimeNano
         frameCount++
-        if (frameCount == gameView.targetFramerate) {
+        if (frameCount == game.targetFramerate) {
             Log.d(TAG, "FPS: ${1000 / ((totalTime / frameCount) / 1000000)}")
             frameCount = 0
             totalTime = 0

@@ -4,9 +4,10 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.example.android.boomplacer.R
-import com.example.android.boomplacer.model.gameobjects.MovePattern
+import com.example.android.boomplacer.model.gameobjects.base.MovePattern
 import com.example.android.boomplacer.model.gameobjects.base.Target
 import com.example.android.boomplacer.math.Vector2
+import com.example.android.boomplacer.model.gameobjects.movepatterns.LinearMovePattern
 
 class LinearTarget(
     image: Bitmap,
@@ -21,7 +22,7 @@ class LinearTarget(
             16f,
             Vector2(200f, 200f),
             Vector2.zero(),
-            MovePattern.linear
+            LinearMovePattern()
         )
     }
 }

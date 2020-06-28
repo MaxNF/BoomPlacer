@@ -2,7 +2,6 @@ package com.example.android.boomplacer.model.gameobjects.base
 
 import android.graphics.Bitmap
 import com.example.android.boomplacer.game.ObjectManager
-import com.example.android.boomplacer.model.gameobjects.MovePattern
 import com.example.android.boomplacer.math.Vector2
 
 open class Target protected constructor(

@@ -6,12 +6,26 @@ import com.example.android.boomplacer.model.gameobjects.base.Target
 import java.util.*
 
 class ObjectManager {
+    var score: Int = 0
+
     val placedTargets = mutableListOf<Target>()
     val placedBombs = mutableListOf<Bomb>()
     val placedBlasts = mutableListOf<Blast>()
 
+    val destroyedTargets = mutableListOf<Target>()
+
     val pendingTargets = LinkedList<Target>()
     val inventoryBombs = LinkedList<Bomb>()
+
+    val noBombsOrBlastsOnScreen
+        get() = placedBlasts.isEmpty() && placedBombs.isEmpty()
+    val noTargetsOnScreen
+        get() = placedTargets.isEmpty()
+
+    val targetsCount
+        get() = pendingTargets.size + placedTargets.size
+    val inventoryBombsCount
+        get() = inventoryBombs.size
 
     fun clearScreen() {
         placedTargets.clear()
@@ -19,17 +33,22 @@ class ObjectManager {
         placedBlasts.clear()
     }
 
-    fun clearInventory() {
+    fun resetInventory() {
         inventoryBombs.clear()
     }
 
-    fun clearPending() {
+    fun resetPendingTargets() {
         pendingTargets.clear()
     }
 
-    fun clearAll() {
-        clearPending()
-        clearInventory()
+    fun resetScore() {
+        score = 0
+    }
+
+    fun reset() {
+        resetPendingTargets()
+        resetInventory()
+        resetScore()
         clearScreen()
     }
 
@@ -74,7 +93,16 @@ class ObjectManager {
         inventoryBombs.addAll(bombs)
     }
 
-    fun pendingTargetsCount() = pendingTargets.size
+    fun calculateScore() {
+        destroyedTargets.forEach {
+            score += it.calculateScore()
+        }
+        destroyedTargets.clear()
+    }
 
-    fun inventoryBombsCount() = inventoryBombs.size
+    fun calculateFinalScore() {
+        inventoryBombs.forEach { bomb ->
+            score += bomb.calculateScore()
+        }
+    }
 }
