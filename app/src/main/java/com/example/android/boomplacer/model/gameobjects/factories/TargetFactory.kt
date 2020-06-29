@@ -1,9 +1,7 @@
 package com.example.android.boomplacer.model.gameobjects.factories
 
 import android.content.res.Resources
-import com.example.android.boomplacer.math.Vector2
-import com.example.android.boomplacer.model.gameobjects.base.Target
-import com.example.android.boomplacer.model.gameobjects.targets.LinearTarget
+import com.example.android.boomplacer.model.gameobjects.targets.Target
 
 class TargetFactory(private val resources: Resources) {
     fun createLinearTargets(amount: Int, fieldWidth: Int, fieldHeight: Int, radiusModifier: Float, speedModifier: Float): List<Target> {

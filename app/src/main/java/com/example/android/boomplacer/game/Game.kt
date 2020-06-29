@@ -4,10 +4,8 @@ import android.content.Context
 import android.graphics.Color
 import android.view.MotionEvent
 import android.view.SurfaceView
-import com.example.android.boomplacer.model.gameobjects.base.Bomb
 import com.example.android.boomplacer.model.gameobjects.GameState
 import com.example.android.boomplacer.model.gameobjects.Level
-import com.example.android.boomplacer.model.gameobjects.base.Target
 import com.example.android.boomplacer.model.gameobjects.factories.BombFactory
 import com.example.android.boomplacer.model.gameobjects.factories.TargetFactory
 import java.lang.IllegalStateException
@@ -75,6 +73,7 @@ class Game(
     fun updateGameState(oneFrameMillis: Long) {
         val secondsElapsed = oneFrameMillis / 1000F
         updateBombsState(secondsElapsed)
+        objectManager.placeBlastsFromExpiredBombs()
         updateBlastsState(secondsElapsed)
         updateTargetsState(secondsElapsed)
         objectManager.calculateScore()
@@ -100,6 +99,7 @@ class Game(
             val bomb = iterator.next()
             if (bomb.updateState(width, height, secondsElapsed, objectManager)) {
                 iterator.remove()
+                objectManager.expiredBombs.add(bomb)
             }
         }
     }

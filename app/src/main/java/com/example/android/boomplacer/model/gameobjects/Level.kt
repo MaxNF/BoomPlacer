@@ -1,17 +1,12 @@
 package com.example.android.boomplacer.model.gameobjects
 
-import com.example.android.boomplacer.math.Vector2
-import com.example.android.boomplacer.model.gameobjects.base.Bomb
-import com.example.android.boomplacer.model.gameobjects.base.Target
+import com.example.android.boomplacer.model.gameobjects.bombs.Bomb
+import com.example.android.boomplacer.model.gameobjects.targets.Target
 import com.example.android.boomplacer.model.gameobjects.factories.BombFactory
 import com.example.android.boomplacer.model.gameobjects.factories.TargetFactory
-import com.example.android.boomplacer.model.gameobjects.targets.LinearTarget
-import kotlin.random.Random
 
 class Level(
     val id: Int,
-    targetFactory: TargetFactory,
-    bombFactory: BombFactory,
     fieldWidth: Int,
     fieldHeight: Int
 ) {
@@ -22,5 +17,5 @@ class Level(
 
     val targets: List<Target> =
         targetFactory.createLinearTargets(id, fieldWidth, fieldHeight, targetRadiusModifier, targetSpeedModifier)
-    val bombs: List<Bomb> = bombFactory.createStaticBombs(id * 2)
+    val bombs: List<Bomb> = bombFactory.createBombs(id * 2)
 }

@@ -1,26 +1,21 @@
-package com.example.android.boomplacer.model.gameobjects.base
+package com.example.android.boomplacer.model.gameobjects.targets
 
 import android.graphics.Bitmap
 import com.example.android.boomplacer.game.ObjectManager
 import com.example.android.boomplacer.math.Vector2
+import com.example.android.boomplacer.model.gameobjects.GameObject
+import com.example.android.boomplacer.model.gameobjects.blasts.Blast
+import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 import kotlin.random.Random
 
-open class Target protected constructor(
-    image: Bitmap,
-    radiusDp: Float,
-    speedDp: Float,
-    fieldWidth: Int,
-    fieldHeight: Int,
-    movePattern: MovePattern,
-    radiusModifier: Float,
-    speedModifier: Float
-) : GameObject(
-    image,
-    radiusDp * radiusModifier,
-    Vector2.create(Random.nextInt(360).toFloat(), speedDp * speedModifier),
-    Vector2.createRandom(fieldWidth, fieldHeight),
-    movePattern
-) {
+open class Target constructor(
+    bitmap: Bitmap,
+    val score: Int,
+    radiusPx: Float,
+    velocityPx: Vector2,
+    positionPx: Vector2,
+    movePattern: MovePattern
+) : GameObject(bitmap, radiusPx, velocityPx, positionPx, movePattern) {
 
     override fun updateState(
         fieldWidth: Int,
@@ -39,9 +34,5 @@ open class Target protected constructor(
             }
         }
         return false
-    }
-
-    open fun calculateScore(): Int {
-        return 1
     }
 }

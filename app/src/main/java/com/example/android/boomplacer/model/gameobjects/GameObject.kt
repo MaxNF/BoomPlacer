@@ -1,4 +1,4 @@
-package com.example.android.boomplacer.model.gameobjects.base
+package com.example.android.boomplacer.model.gameobjects
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -6,18 +6,17 @@ import androidx.core.graphics.scale
 import com.example.android.boomplacer.extensions.dpToPx
 import com.example.android.boomplacer.game.ObjectManager
 import com.example.android.boomplacer.math.Vector2
+import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 import java.lang.UnsupportedOperationException
 
 abstract class GameObject protected constructor(
     bitmap: Bitmap?,
-    radiusDp: Float,
-    velocityDp: Vector2,
-    var positionPx: Vector2,
-    var movePattern: MovePattern
+    protected var radiusPx: Float,
+    protected var velocityPx: Vector2,
+    protected var positionPx: Vector2,
+    protected var movePattern: MovePattern
 ) {
     private val TAG = "GameObject"
-    var radiusPx: Float = dpToPx(radiusDp)
-    var velocityPx: Vector2 = Vector2(dpToPx(velocityDp.x), dpToPx(velocityDp.y))
 
     private val scaledBitmap: Bitmap? =
         bitmap?.scale((radiusPx * 2).toInt(), (radiusPx * 2).toInt())
@@ -75,8 +74,7 @@ abstract class GameObject protected constructor(
         secondsElapsed: Float,
         objectManager: ObjectManager
     ): Boolean {
-        positionPx =
-            movePattern.calculatePosition(positionPx, velocityPx * secondsElapsed)
+        movePattern.apply(this, secondsElapsed)
         if (topWallIntersected()) bounceDown()
         if (bottomWallIntersected(fieldHeight)) bounceUp(fieldHeight)
         if (leftWallIntersected()) bounceRight()

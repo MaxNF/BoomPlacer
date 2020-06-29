@@ -1,8 +1,8 @@
 package com.example.android.boomplacer.game
 
-import com.example.android.boomplacer.model.gameobjects.base.Blast
-import com.example.android.boomplacer.model.gameobjects.base.Bomb
-import com.example.android.boomplacer.model.gameobjects.base.Target
+import com.example.android.boomplacer.model.gameobjects.blasts.Blast
+import com.example.android.boomplacer.model.gameobjects.bombs.Bomb
+import com.example.android.boomplacer.model.gameobjects.targets.Target
 import java.util.*
 
 class ObjectManager {
@@ -13,6 +13,7 @@ class ObjectManager {
     val placedBlasts = mutableListOf<Blast>()
 
     val destroyedTargets = mutableListOf<Target>()
+    val expiredBombs = mutableListOf<Bomb>()
 
     val pendingTargets = LinkedList<Target>()
     val inventoryBombs = LinkedList<Bomb>()
@@ -64,10 +65,13 @@ class ObjectManager {
         }
     }
 
-    fun placeBlast(bomb: Bomb) {
-        val blast = bomb.blast
-        blast.positionPx = bomb.positionPx
-        placedBlasts.add(blast)
+    fun placeBlastsFromExpiredBombs() {
+        expiredBombs.forEach { bomb ->
+            val blast = bomb.blast
+            blast.positionPx = bomb.positionPx
+            placedBlasts.add(blast)
+        }
+
     }
 
     /**
@@ -102,7 +106,7 @@ class ObjectManager {
 
     fun calculateFinalScore() {
         inventoryBombs.forEach { bomb ->
-            score += bomb.calculateScore()
+            score += bomb.score
         }
     }
 }
