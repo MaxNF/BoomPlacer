@@ -3,10 +3,9 @@ package com.example.android.boomplacer.model.gameobjects.targets
 import android.graphics.Bitmap
 import com.example.android.boomplacer.game.ObjectManager
 import com.example.android.boomplacer.math.Vector2
-import com.example.android.boomplacer.model.gameobjects.GameObject
+import com.example.android.boomplacer.model.gameobjects.base.GameObject
 import com.example.android.boomplacer.model.gameobjects.blasts.Blast
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
-import kotlin.random.Random
 
 open class Target constructor(
     bitmap: Bitmap,

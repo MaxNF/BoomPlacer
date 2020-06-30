@@ -121,4 +121,8 @@ class UserInterface(private val activity: Activity, private val gameFlow: GameFl
     fun showNoMoreBombsView() {
 
     }
+
+    fun showAntiTargetDestroyedView() {
+
+    }
 }

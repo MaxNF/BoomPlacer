@@ -1,7 +1,7 @@
 package com.example.android.boomplacer.model.gameobjects.movepatterns
 
 import com.example.android.boomplacer.math.Vector2
-import com.example.android.boomplacer.model.gameobjects.GameObject
+import com.example.android.boomplacer.model.gameobjects.base.GameObject
 
 abstract class MovePattern {
     open fun apply(gameObject: GameObject, secondsElapsed: Float) {

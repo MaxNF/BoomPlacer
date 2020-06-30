@@ -9,13 +9,16 @@ class ObjectManager {
     var score: Int = 0
 
     val placedTargets = mutableListOf<Target>()
+    val placedAntiTargets = mutableListOf<Target>()
     val placedBombs = mutableListOf<Bomb>()
     val placedBlasts = mutableListOf<Blast>()
 
     val destroyedTargets = mutableListOf<Target>()
+    val destroyedAntiTargets = mutableListOf<Target>()
     val expiredBombs = mutableListOf<Bomb>()
 
     val pendingTargets = LinkedList<Target>()
+    val pendingAntiTargets = LinkedList<Target>()
     val inventoryBombs = LinkedList<Bomb>()
 
     val noBombsOrBlastsOnScreen
@@ -65,6 +68,12 @@ class ObjectManager {
         }
     }
 
+    fun placeAllAntiTargets() {
+        while (pendingAntiTargets.isNotEmpty()) {
+            placedAntiTargets.add(pendingAntiTargets.pop())
+        }
+    }
+
     fun placeBlastsFromExpiredBombs() {
         expiredBombs.forEach { bomb ->
             val blast = bomb.blast
@@ -99,7 +108,7 @@ class ObjectManager {
 
     fun calculateScore() {
         destroyedTargets.forEach {
-            score += it.calculateScore()
+            score += it.score
         }
         destroyedTargets.clear()
     }

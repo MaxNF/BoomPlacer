@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import com.example.android.boomplacer.game.ObjectManager
 import com.example.android.boomplacer.math.Vector2
-import com.example.android.boomplacer.model.gameobjects.GameObject
+import com.example.android.boomplacer.model.gameobjects.base.GameObject
 import com.example.android.boomplacer.model.gameobjects.blastpatterns.BlastRadiusPattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 

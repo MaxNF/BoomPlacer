@@ -1,4 +1,4 @@
-package com.example.android.boomplacer.model.gameobjects
+package com.example.android.boomplacer.model.gameobjects.base
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,9 +11,9 @@ import java.lang.UnsupportedOperationException
 
 abstract class GameObject protected constructor(
     bitmap: Bitmap?,
-    protected var radiusPx: Float,
+    var radiusPx: Float,
     protected var velocityPx: Vector2,
-    protected var positionPx: Vector2,
+    var positionPx: Vector2,
     protected var movePattern: MovePattern
 ) {
     private val TAG = "GameObject"

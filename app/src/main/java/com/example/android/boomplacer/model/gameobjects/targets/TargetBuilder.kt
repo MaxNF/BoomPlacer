@@ -1,5 +1,6 @@
-package com.example.android.boomplacer.model.gameobjects.builders
+package com.example.android.boomplacer.model.gameobjects.targets
 
+import com.example.android.boomplacer.model.gameobjects.base.GameObjectBuilder
 import com.example.android.boomplacer.model.gameobjects.targets.Target
 
 class TargetBuilder : GameObjectBuilder<Target>() {
@@ -7,6 +8,6 @@ class TargetBuilder : GameObjectBuilder<Target>() {
         get() = field ?: throwPropertyNotSetException(::score.name)
 
     override fun build(): Target {
-        return Target(scaledBitmap, score!!, radiusPx, velocityPx, positionPx, movePattern!!)
+        return Target(scaledBitmap, score!!, radiusPx, velocityPx, positionPx!!, movePattern!!)
     }
 }

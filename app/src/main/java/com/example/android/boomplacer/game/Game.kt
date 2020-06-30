@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.view.MotionEvent
 import android.view.SurfaceView
 import com.example.android.boomplacer.model.gameobjects.GameState
-import com.example.android.boomplacer.model.gameobjects.Level
+import com.example.android.boomplacer.model.gameobjects.levels.Level
 import com.example.android.boomplacer.model.gameobjects.factories.BombFactory
 import com.example.android.boomplacer.model.gameobjects.factories.TargetFactory
 import java.lang.IllegalStateException
@@ -59,13 +59,14 @@ class Game(
         objectManager.reset()
         userInterface.reset()
 
-        val level = Level(
-            levelId,
-            TargetFactory(context.resources),
-            BombFactory(context.resources),
-            width,
-            height
-        )
+        val level =
+            Level(
+                levelId,
+                TargetFactory(context.resources),
+                BombFactory(context.resources),
+                width,
+                height
+            )
         objectManager.addPendingTargets(level.targets)
         objectManager.addInventoryBombs(level.bombs)
     }
@@ -76,6 +77,7 @@ class Game(
         objectManager.placeBlastsFromExpiredBombs()
         updateBlastsState(secondsElapsed)
         updateTargetsState(secondsElapsed)
+        updateAntiTargetsState(secondsElapsed)
         objectManager.calculateScore()
 
         val gameState = calculateGameState()
@@ -126,13 +128,27 @@ class Game(
         }
     }
 
+    private fun updateAntiTargetsState(secondsElapsed: Float) {
+        val iterator = objectManager.placedAntiTargets.iterator()
+        while (iterator.hasNext()) {
+            val antiTarget = iterator.next()
+            val isDestroyed = antiTarget.updateState(width, height, secondsElapsed, objectManager)
+            if (isDestroyed) {
+                iterator.remove()
+                objectManager.destroyedTargets.add(antiTarget)
+            }
+        }
+    }
+
     private fun calculateGameState(): GameState {
         val anyTargetsLeft =
             objectManager.pendingTargets.isNotEmpty() || objectManager.placedTargets.isNotEmpty()
         val anyBombsLeft =
             objectManager.inventoryBombs.isNotEmpty() || objectManager.placedBombs.isNotEmpty()
         val anyBlastsProceed = objectManager.placedBlasts.isNotEmpty()
+        val anyAntiTargetsDestroyed = objectManager.destroyedAntiTargets.isNotEmpty()
         return when {
+            anyAntiTargetsDestroyed && !anyBlastsProceed -> GameState.LOSE_ANTI_TARGET_DESTROYED
             anyTargetsLeft && !anyBombsLeft && !anyBlastsProceed -> GameState.LOSE_NO_BOMBS_LEFT
             !anyTargetsLeft && !anyBlastsProceed -> GameState.WIN_TARGETS_DESTROYED
             else -> GameState.RUNNING
@@ -144,6 +160,9 @@ class Game(
             GameState.WIN_TARGETS_DESTROYED -> {
                 objectManager.calculateFinalScore()
                 userInterface.showWinView()
+            }
+            GameState.LOSE_ANTI_TARGET_DESTROYED -> {
+                userInterface.showAntiTargetDestroyedView()
             }
             GameState.LOSE_NO_BOMBS_LEFT -> {
                 userInterface.showNoMoreBombsView()
