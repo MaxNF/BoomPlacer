@@ -7,8 +7,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import com.example.android.boomplacer.R
-import com.example.android.boomplacer.model.gameobjects.factories.BombFactory
-import com.example.android.boomplacer.model.gameobjects.factories.TargetFactory
 
 class UserInterface(private val activity: Activity, private val gameFlow: GameFlow) {
     private val defaultValue = "0"

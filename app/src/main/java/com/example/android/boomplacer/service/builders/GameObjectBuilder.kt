@@ -1,10 +1,12 @@
-package com.example.android.boomplacer.model.gameobjects.base
+package com.example.android.boomplacer.service.builders
 
 import android.graphics.Bitmap
 import androidx.core.graphics.scale
 import com.example.android.boomplacer.extensions.dpToPx
 import com.example.android.boomplacer.math.Vector2
 import com.example.android.boomplacer.model.PropertyNotSetException
+import com.example.android.boomplacer.model.gameobjects.base.GameObject
+import com.example.android.boomplacer.model.gameobjects.base.Pattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 
 abstract class GameObjectBuilder<T : GameObject> {

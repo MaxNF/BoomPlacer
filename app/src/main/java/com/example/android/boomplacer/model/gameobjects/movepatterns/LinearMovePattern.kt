@@ -8,7 +8,7 @@ class LinearMovePattern(
     minLevelCategory: LevelCategory,
     patternDifficulty: Int
 ) : MovePattern(minLevelCategory, patternDifficulty) {
-    override fun calculatePosition(gameObject: GameObject, secondsElapsed: Float): Vector2 {
-        return gameObject.positionPx + gameObject.velocityPx
+    override fun applyPattern(gameObject: GameObject, secondsElapsed: Float) {
+        gameObject.positionPx = gameObject.positionPx + gameObject.velocityPx
     }
 }

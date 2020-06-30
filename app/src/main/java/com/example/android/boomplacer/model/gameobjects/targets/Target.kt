@@ -4,10 +4,11 @@ import android.graphics.Bitmap
 import com.example.android.boomplacer.game.ObjectManager
 import com.example.android.boomplacer.math.Vector2
 import com.example.android.boomplacer.model.gameobjects.base.GameObject
+import com.example.android.boomplacer.model.gameobjects.base.Pattern
 import com.example.android.boomplacer.model.gameobjects.blasts.Blast
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 
-open class Target constructor(
+open class Target(
     bitmap: Bitmap,
     val score: Int,
     radiusPx: Float,

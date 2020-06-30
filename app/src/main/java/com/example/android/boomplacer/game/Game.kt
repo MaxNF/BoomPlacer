@@ -6,8 +6,8 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 import com.example.android.boomplacer.model.gameobjects.GameState
 import com.example.android.boomplacer.model.gameobjects.levels.Level
-import com.example.android.boomplacer.model.gameobjects.factories.BombFactory
-import com.example.android.boomplacer.model.gameobjects.factories.TargetFactory
+import com.example.android.boomplacer.service.factories.BombFactory
+import com.example.android.boomplacer.service.factories.TargetFactory
 import java.lang.IllegalStateException
 
 class Game(

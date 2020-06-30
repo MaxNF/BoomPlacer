@@ -14,7 +14,7 @@ abstract class GameObject protected constructor(
     var radiusPx: Float,
     var velocityPx: Vector2,
     var positionPx: Vector2,
-    protected var movePattern: MovePattern
+    protected var movePattern: Pattern<GameObject>
 ) {
     private val TAG = "GameObject"
 
@@ -74,7 +74,7 @@ abstract class GameObject protected constructor(
         secondsElapsed: Float,
         objectManager: ObjectManager
     ): Boolean {
-        movePattern.apply(this, secondsElapsed)
+        movePattern.applyPattern(this, secondsElapsed)
         if (topWallIntersected()) bounceDown()
         if (bottomWallIntersected(fieldHeight)) bounceUp(fieldHeight)
         if (leftWallIntersected()) bounceRight()

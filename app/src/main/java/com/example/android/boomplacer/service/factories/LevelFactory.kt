@@ -1,10 +1,10 @@
-package com.example.android.boomplacer.model.gameobjects.levels
+package com.example.android.boomplacer.service.factories
 
 import com.example.android.boomplacer.gamedata.LevelCategory
 import com.example.android.boomplacer.model.WeightedBag
 import com.example.android.boomplacer.model.gameobjects.bombs.Bomb
-import com.example.android.boomplacer.model.gameobjects.factories.BombFactory
-import com.example.android.boomplacer.model.gameobjects.factories.TargetFactory
+import com.example.android.boomplacer.model.gameobjects.levels.Level
+import com.example.android.boomplacer.model.gameobjects.levels.LevelProperties
 import com.example.android.boomplacer.model.gameobjects.modifiers.TargetModifiers
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 import com.example.android.boomplacer.model.gameobjects.targets.Target

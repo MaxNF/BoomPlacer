@@ -1,6 +1,5 @@
-package com.example.android.boomplacer.model.gameobjects.targets
+package com.example.android.boomplacer.service.builders
 
-import com.example.android.boomplacer.model.gameobjects.base.GameObjectBuilder
 import com.example.android.boomplacer.model.gameobjects.targets.Target
 
 class TargetBuilder : GameObjectBuilder<Target>() {

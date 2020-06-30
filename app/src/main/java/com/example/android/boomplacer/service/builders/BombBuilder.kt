@@ -1,8 +1,8 @@
-package com.example.android.boomplacer.model.gameobjects.bombs
+package com.example.android.boomplacer.service.builders
 
 import com.example.android.boomplacer.model.gameobjects.blasts.Blast
 import com.example.android.boomplacer.model.gameobjects.bombpatterns.BombTimePattern
-import com.example.android.boomplacer.model.gameobjects.base.GameObjectBuilder
+import com.example.android.boomplacer.model.gameobjects.bombs.Bomb
 
 class BombBuilder : GameObjectBuilder<Bomb>() {
     var blast: Blast? = null
