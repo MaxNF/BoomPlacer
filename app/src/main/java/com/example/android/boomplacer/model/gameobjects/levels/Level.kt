@@ -1,6 +1,8 @@
 package com.example.android.boomplacer.model.gameobjects.levels
 
+import com.example.android.boomplacer.model.WeightedBag
 import com.example.android.boomplacer.model.gameobjects.bombs.Bomb
+import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 import com.example.android.boomplacer.model.gameobjects.targets.Target
 
 class Level(

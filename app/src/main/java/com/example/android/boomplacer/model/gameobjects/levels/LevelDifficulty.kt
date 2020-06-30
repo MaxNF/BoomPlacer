@@ -1,5 +1,7 @@
 package com.example.android.boomplacer.model.gameobjects.levels
 
-enum class LevelDifficulty {
-    EASY, NORMAL, HARD, VERY_HARD, INSANE
+import com.example.android.boomplacer.gamedata.LevelCategory
+
+class LevelDifficulty(val levelCategory: LevelCategory, val difficultyOffset: Int) {
+    val difficultyValue = levelCategory.baseDifficulty + difficultyOffset
 }

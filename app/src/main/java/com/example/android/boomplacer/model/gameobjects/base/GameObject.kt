@@ -12,7 +12,7 @@ import java.lang.UnsupportedOperationException
 abstract class GameObject protected constructor(
     bitmap: Bitmap?,
     var radiusPx: Float,
-    protected var velocityPx: Vector2,
+    var velocityPx: Vector2,
     var positionPx: Vector2,
     protected var movePattern: MovePattern
 ) {
