@@ -5,20 +5,25 @@ import com.example.android.boomplacer.model.gameobjects.blastpatterns.BlastRadiu
 import com.example.android.boomplacer.model.gameobjects.blasts.Blast
 
 class BlastBuilder : GameObjectBuilder<Blast>() {
+
     var paint: Paint? = null
         get() = field ?: throwPropertyNotSetException(::paint.name)
 
-    var blastRadiusPattern: BlastRadiusPattern? = null
-        get() = field ?: throwPropertyNotSetException(::blastRadiusPattern.name)
+    var radiusPattern: BlastRadiusPattern? = null
+        get() = field ?: throwPropertyNotSetException(::radiusPattern.name)
+
+    var radiusChangeRate: Float? = null
+    get() = field ?: throwPropertyNotSetException(::radiusChangeRate.name)
 
     override fun build(): Blast {
         return Blast(
             paint!!,
             radiusPx,
+            radiusChangeRate!!,
             velocityPx,
             positionPx!!,
             movePattern!!,
-            blastRadiusPattern!!
+            radiusPattern!!
         )
     }
 }

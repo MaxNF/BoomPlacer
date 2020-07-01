@@ -1,11 +1,11 @@
 package com.example.android.boomplacer.model.gameobjects.blastpatterns
 
+import com.example.android.boomplacer.gamedata.LevelCategory
 import com.example.android.boomplacer.model.gameobjects.blasts.Blast
 
-class LinearDecreaseBlastRadiusPattern(private val radiusIncreaseRate: Float) : BlastRadiusPattern() {
-    override fun calculateRadius(blast: Blast, secondsElapsed: Float): Float {
-        return with(blast) {
-            radiusPx + (radiusPx * radiusIncreaseRate * secondsElapsed)
-        }
+class LinearDecreaseBlastRadiusPattern(minLevelCategory: LevelCategory, patternDifficulty: Int) :
+    BlastRadiusPattern(minLevelCategory, patternDifficulty) {
+    override fun applyPattern(gameObject: Blast, secondsElapsed: Float) {
+        gameObject.radiusPx += gameObject.radiusChangeRate * secondsElapsed
     }
 }

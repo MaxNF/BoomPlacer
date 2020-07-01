@@ -1,7 +1,6 @@
 package com.example.android.boomplacer.model.gameobjects.movepatterns
 
 import com.example.android.boomplacer.gamedata.LevelCategory
-import com.example.android.boomplacer.math.Vector2
 import com.example.android.boomplacer.model.gameobjects.base.GameObject
 
 class LinearMovePattern(
@@ -9,6 +8,6 @@ class LinearMovePattern(
     patternDifficulty: Int
 ) : MovePattern(minLevelCategory, patternDifficulty) {
     override fun applyPattern(gameObject: GameObject, secondsElapsed: Float) {
-        gameObject.positionPx = gameObject.positionPx + gameObject.velocityPx
+        gameObject.positionPx = gameObject.positionPx + gameObject.velocityPx * secondsElapsed
     }
 }

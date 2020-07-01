@@ -11,6 +11,7 @@ import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 open class Blast constructor(
     protected val paint: Paint,
     radiusPx: Float,
+    var radiusChangeRate: Float,
     velocityPx: Vector2,
     positionPx: Vector2,
     movePattern: MovePattern,
@@ -27,7 +28,7 @@ open class Blast constructor(
         secondsElapsed: Float,
         objectManager: ObjectManager
     ): Boolean {
-        blastRadiusPattern.apply(this, secondsElapsed)
+        blastRadiusPattern.applyPattern(this, secondsElapsed)
         return radiusPx <= 0
     }
 }

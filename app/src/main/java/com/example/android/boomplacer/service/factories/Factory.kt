@@ -9,7 +9,7 @@ import com.example.android.boomplacer.model.gameobjects.modifiers.Modifiers
 import kotlin.random.Random
 
 abstract class Factory<T : GameObject>(
-    protected val icon: Bitmap,
+    protected val icon: Bitmap?,
     protected val fieldWidth: Int,
     protected val fieldHeight: Int
 ) {

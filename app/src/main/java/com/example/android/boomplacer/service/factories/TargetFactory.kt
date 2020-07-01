@@ -18,8 +18,7 @@ class TargetFactory(targetIcon: Bitmap, fieldWidth: Int, fieldHeight: Int) :
             TargetData.AVAILABLE_MOVE_PATTERNS.filter { it.isAvailableInCategory(levelDifficulty.levelCategory) }
         val movePatternsPool = createWeightedPatternsPool(availableMovePatterns)
 
-        val builder = TargetBuilder()
-        return builder.apply {
+        return TargetBuilder().apply {
             unscaledBitmap = icon
             score = calculateScore(levelDifficulty)
             angle = randomizeAngle()

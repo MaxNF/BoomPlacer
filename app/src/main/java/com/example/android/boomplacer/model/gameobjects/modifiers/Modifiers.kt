@@ -1,4 +1,3 @@
 package com.example.android.boomplacer.model.gameobjects.modifiers
 
-interface Modifiers {
-}
+open class Modifiers(val speedModifier: Float)
