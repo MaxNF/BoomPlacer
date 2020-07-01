@@ -16,10 +16,6 @@ abstract class Factory<T : GameObject>(
 
     abstract fun create(levelDifficulty: LevelDifficulty): List<T>
 
-    protected abstract fun calculateAmount(levelDifficulty: LevelDifficulty): Int
-
-    protected abstract fun calculateModifiers(levelDifficulty: LevelDifficulty): Modifiers
-
     protected open fun randomizeAngle(): Float = Random.nextFloat() * 360
 
     protected open fun createWeightedPatternsPool(availablePatterns: List<Pattern<in T>>): WeightedBag<Pattern<in T>> {

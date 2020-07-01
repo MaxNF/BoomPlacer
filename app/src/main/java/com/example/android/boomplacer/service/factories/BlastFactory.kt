@@ -11,10 +11,10 @@ import com.example.android.boomplacer.model.gameobjects.modifiers.BlastModifiers
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 import com.example.android.boomplacer.service.builders.BlastBuilder
 
-class BlastFactory(icon: Bitmap?, val paint: Paint, fieldWidth: Int, fieldHeight: Int) :
+class BlastFactory(icon: Bitmap?, private val paint: Paint, fieldWidth: Int, fieldHeight: Int) :
     Factory<Blast>(icon, fieldWidth, fieldHeight) {
     override fun create(levelDifficulty: LevelDifficulty): List<Blast> {
-        val blastModifiers = calculateModifiers(levelDifficulty)
+        val difficultyValue = levelDifficulty.difficultyValue
 
         val availableRadiusPatterns =
             BlastData.AVAILABLE_RADIUS_PATTERNS.filter { it.isAvailableInCategory(levelDifficulty.levelCategory) }
@@ -28,23 +28,11 @@ class BlastFactory(icon: Bitmap?, val paint: Paint, fieldWidth: Int, fieldHeight
             paint = paint
             angle = randomizeAngle()
             positionPx = Vector2.createRandom(fieldWidth, fieldHeight)
-            radiusDp = BlastData.BASE_RADIUS * blastModifiers.radiusModifier
-            radiusChangeRate =
-                BlastData.BASE_RADIUS_CHANGE_RATE * blastModifiers.radiusChangeRateModifier
-            speedDp = BlastData.BASE_SPEED * blastModifiers.speedModifier
+            radiusDp = BlastData.RADIUS_FORMULA(difficultyValue)
+            radiusChangeRate = BlastData.RADIUS_CHANGE_RATE_FORMULA(difficultyValue)
+            speedDp = BlastData.SPEED_FORMULA(difficultyValue)
             movePattern = movePatternsPool.getRandom() as MovePattern
             radiusPattern = blastPatternsPool.getRandom() as BlastRadiusPattern
-        }.build(calculateAmount(levelDifficulty))
-    }
-
-    override fun calculateAmount(levelDifficulty: LevelDifficulty): Int =
-        BlastData.AMOUNT_FORMULA(levelDifficulty.difficultyValue)
-
-    override fun calculateModifiers(levelDifficulty: LevelDifficulty): BlastModifiers {
-        val speedModifier = BlastData.SPEED_MODIFIER_FORMULA(levelDifficulty.difficultyValue)
-        val blastRadiusModifier = BlastData.RADIUS_MODIFIER_FORMULA(levelDifficulty.difficultyValue)
-        val blastRadiusDecreaseModifier =
-            BlastData.RADIUS_CHANGE_RATE_MODIFIER_FORMULA(levelDifficulty.difficultyValue)
-        return BlastModifiers(speedModifier, blastRadiusModifier, blastRadiusDecreaseModifier)
+        }.build(BlastData.AMOUNT_FORMULA(difficultyValue))
     }
 }

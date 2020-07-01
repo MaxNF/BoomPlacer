@@ -10,8 +10,8 @@ class TargetData {
 
         val AMOUNT_FORMULA: (difficultyValue: Int) -> Int = TODO()
         val SCORE_FORMULA: (difficultyValue: Int) -> Int = TODO()
-        val SPEED_MODIFIER_FORMULA: (difficultyValue: Int) -> Float = TODO()
-        val RADIUS_MODIFIER_FORMULA: (difficultyValue: Int) -> Float = TODO()
+        val SPEED_FORMULA: (difficultyValue: Int) -> Float = TODO()
+        val RADIUS_FORMULA: (difficultyValue: Int) -> Float = TODO()
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
             listOf(LinearMovePattern(LevelCategory.EASY, 1))
