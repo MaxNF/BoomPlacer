@@ -12,11 +12,21 @@ class BombData {
         const val BASE_RADIUS: Float = 8f
         const val BASE_TIME_SEC: Float = 1f
 
-        val AMOUNT_FORMULA: (difficultyValue: Int) -> Int = TODO()
-        val SCORE_FORMULA: (difficultyValue: Int) -> Int = TODO()
-        val RADIUS_FORMULA: (difficultyValue: Int) -> Float = TODO()
-        val SPEED_FORMULA: (difficultyValue: Int) -> Float = TODO()
-        val TIME_FORMULA: (difficultyValue: Int) -> Float = TODO()
+        val AMOUNT_FORMULA: (difficultyValue: Int) -> Int = { dif ->
+            val levelTargetCount = TargetData.AMOUNT_FORMULA(dif)
+            val additionalBombs = levelTargetCount - (levelTargetCount * dif / 45f)
+            val totalBombs = levelTargetCount + additionalBombs
+            if (totalBombs < levelTargetCount) {
+                levelTargetCount
+            } else {
+                totalBombs.toInt()
+            }
+        }
+        val SCORE_FORMULA: (difficultyValue: Int) -> Int = { dif -> 1 + 3 * (dif / 10) }
+        val RADIUS_FORMULA: (difficultyValue: Int) -> Float = { BASE_RADIUS }
+        val SPEED_FORMULA: (difficultyValue: Int) -> Float =
+            { dif -> BASE_SPEED + 1f * (dif / 20f) }
+        val TIME_FORMULA: (difficultyValue: Int) -> Float = { dif -> BASE_TIME_SEC + dif / 20f }
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
             listOf(StaticMovePattern(LevelCategory.EASY, 0))

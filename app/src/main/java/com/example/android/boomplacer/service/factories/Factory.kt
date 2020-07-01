@@ -27,6 +27,10 @@ abstract class Factory<T : GameObject>(protected val icon: Bitmap?) {
         accumulatedDifficulty: Int,
         patternDifficulty: Int
     ): Int {
-        return accumulatedDifficulty / patternDifficulty
+        return if (patternDifficulty == 0) {
+            1
+        } else {
+            accumulatedDifficulty / patternDifficulty
+        }
     }
 }
