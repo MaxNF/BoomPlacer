@@ -108,7 +108,7 @@ class UserInterface(private val activity: Activity, private val gameFlow: GameFl
     }
 
     private fun startNewGame() {
-        gameFlow.initNewGame(10)
+//        gameFlow.initNewGame()
         gameFlow.startGame()
     }
 

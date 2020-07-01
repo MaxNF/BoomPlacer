@@ -102,6 +102,10 @@ class ObjectManager {
         pendingTargets.addAll(targets)
     }
 
+    fun addPendingAntiTargets(antiTargets: Iterable<Target>) {
+        pendingAntiTargets.addAll(antiTargets)
+    }
+
     fun addInventoryBombs(bombs: Iterable<Bomb>) {
         inventoryBombs.addAll(bombs)
     }

@@ -9,7 +9,7 @@ import com.example.android.boomplacer.model.gameobjects.base.GameObject
 import com.example.android.boomplacer.model.gameobjects.base.Pattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 
-abstract class GameObjectBuilder<T : GameObject> {
+abstract class GameObjectBuilder<T : GameObject> : Builder() {
     var unscaledBitmap: Bitmap? = null
     protected val scaledBitmap: Bitmap
         get() {
@@ -66,11 +66,5 @@ abstract class GameObjectBuilder<T : GameObject> {
         speedDp = null
         positionPx = null
         movePattern = null
-    }
-
-    protected fun throwPropertyNotSetException(propertyName: String): Nothing {
-        throw PropertyNotSetException(
-            "Property $propertyName was not configured."
-        )
     }
 }

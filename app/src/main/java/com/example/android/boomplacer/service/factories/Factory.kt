@@ -8,11 +8,7 @@ import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
 import com.example.android.boomplacer.model.gameobjects.modifiers.Modifiers
 import kotlin.random.Random
 
-abstract class Factory<T : GameObject>(
-    protected val icon: Bitmap?,
-    protected val fieldWidth: Int,
-    protected val fieldHeight: Int
-) {
+abstract class Factory<T : GameObject>(protected val icon: Bitmap?) {
 
     abstract fun create(levelDifficulty: LevelDifficulty): List<T>
 

@@ -11,8 +11,7 @@ import com.example.android.boomplacer.model.gameobjects.modifiers.BlastModifiers
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 import com.example.android.boomplacer.service.builders.BlastBuilder
 
-class BlastFactory(icon: Bitmap?, private val paint: Paint, fieldWidth: Int, fieldHeight: Int) :
-    Factory<Blast>(icon, fieldWidth, fieldHeight) {
+class BlastFactory(icon: Bitmap?, private val paint: Paint) : Factory<Blast>(icon) {
     override fun create(levelDifficulty: LevelDifficulty): List<Blast> {
         val difficultyValue = levelDifficulty.difficultyValue
 
@@ -27,7 +26,7 @@ class BlastFactory(icon: Bitmap?, private val paint: Paint, fieldWidth: Int, fie
         return BlastBuilder().apply {
             paint = paint
             angle = randomizeAngle()
-            positionPx = Vector2.createRandom(fieldWidth, fieldHeight)
+            positionPx = Vector2.zero()
             radiusDp = BlastData.RADIUS_FORMULA(difficultyValue)
             radiusChangeRate = BlastData.RADIUS_CHANGE_RATE_FORMULA(difficultyValue)
             speedDp = BlastData.SPEED_FORMULA(difficultyValue)

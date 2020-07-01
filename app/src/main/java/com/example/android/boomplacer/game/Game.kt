@@ -6,8 +6,6 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 import com.example.android.boomplacer.model.gameobjects.GameState
 import com.example.android.boomplacer.model.gameobjects.levels.Level
-import com.example.android.boomplacer.service.factories.BombFactory
-import com.example.android.boomplacer.service.factories.TargetFactory
 import java.lang.IllegalStateException
 
 class Game(
@@ -19,7 +17,6 @@ class Game(
     var showFramerate = false
 
     private lateinit var userInterface: UserInterface
-    private var level = 0
 
     fun attachUserInterface(userInterface: UserInterface) {
         this.userInterface = userInterface
@@ -53,21 +50,21 @@ class Game(
 
     override fun isPaused() = gameLoop.paused
 
-    override fun initNewGame(levelId: Int) {
+    override fun initNewGame(level: Level) {
+        resetGameState()
+        addGameObjects(level)
+    }
+
+    private fun resetGameState() {
         if (::gameLoop.isInitialized && gameLoop.running) stopGame()
         gameLoop = GameLoop(this)
         objectManager.reset()
         userInterface.reset()
+    }
 
-        val level =
-            Level(
-                levelId,
-                TargetFactory(context.resources),
-                BombFactory(context.resources),
-                width,
-                height
-            )
+    private fun addGameObjects(level: Level) {
         objectManager.addPendingTargets(level.targets)
+        objectManager.addPendingAntiTargets(level.antiTargets)
         objectManager.addInventoryBombs(level.bombs)
     }
 

@@ -17,13 +17,8 @@ import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 import com.example.android.boomplacer.service.builders.BlastBuilder
 import com.example.android.boomplacer.service.builders.BombBuilder
 
-class BombFactory(
-    private val blastFactory: BlastFactory,
-    bombIcon: Bitmap,
-    fieldWidth: Int,
-    fieldHeight: Int
-) :
-    Factory<Bomb>(bombIcon, fieldWidth, fieldHeight) {
+class BombFactory(private val blastFactory: BlastFactory, bombIcon: Bitmap) :
+    Factory<Bomb>(bombIcon) {
 
     override fun create(levelDifficulty: LevelDifficulty): List<Bomb> {
         val bombBlast = blastFactory.create(levelDifficulty)[0]
