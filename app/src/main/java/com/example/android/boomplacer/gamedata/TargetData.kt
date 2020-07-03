@@ -6,7 +6,7 @@ import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 class TargetData {
     companion object {
         const val BASE_SPEED: Float = 100f
-        const val BASE_RADIUS: Float = 50f
+        const val BASE_RADIUS: Float = 30f
 
         val AMOUNT_FORMULA: (difficultyValue: Int) -> Int = { dif -> 1 + dif / 10 + (dif % 10) / 2 }
         val SCORE_FORMULA: (difficultyValue: Int) -> Int = { dif -> 1 + dif / 10 + (dif % 10) / 4 }
@@ -16,6 +16,6 @@ class TargetData {
             { dif -> BASE_RADIUS - BASE_RADIUS * (dif / 50f) }
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
-            listOf(LinearMovePattern(LevelCategory.EASY, 0))
+            listOf(LinearMovePattern(LevelCategory.EASY, 1))
     }
 }

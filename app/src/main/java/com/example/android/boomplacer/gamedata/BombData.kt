@@ -29,8 +29,8 @@ class BombData {
         val TIME_FORMULA: (difficultyValue: Int) -> Float = { dif -> BASE_TIME_SEC + dif / 20f }
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
-            listOf(StaticMovePattern(LevelCategory.EASY, 0))
+            listOf(StaticMovePattern(LevelCategory.EASY, 1))
         val AVAILABLE_TIME_PATTERNS: List<BombTimePattern> =
-            listOf(SimpleBombTimePattern(LevelCategory.EASY, 0))
+            listOf(SimpleBombTimePattern(LevelCategory.EASY, 1))
     }
 }

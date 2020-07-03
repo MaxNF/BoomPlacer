@@ -8,7 +8,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.example.android.boomplacer.R
 import com.example.android.boomplacer.extensions.createDebugLevel
+import com.example.android.boomplacer.gamedata.LevelCategory
 import com.example.android.boomplacer.model.gameobjects.levels.Level
+import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
 
 class UserInterface(private val activity: Activity, private val gameFlow: GameFlow) {
     private val defaultValue = "0"
@@ -32,7 +34,7 @@ class UserInterface(private val activity: Activity, private val gameFlow: GameFl
     init {
         menuButton.setOnClickListener { showMenu() }
         menuNewGameButton.setOnClickListener {
-            startNewGame(createDebugLevel(gameFlow as Game))
+            startNewGame(createDebugLevel(gameFlow as Game, LevelDifficulty(LevelCategory.EASY, 9)))
             hideMenu()
         }
         menuResumeButton.setOnClickListener {

@@ -10,6 +10,7 @@ class Vector2(var x: Float, var y: Float) {
     companion object {
         fun zero() = Vector2(0f, 0f)
         fun create(angle: Float, speed: Float) = Vector2(speed * sin(angle), speed * cos(angle))
+        fun create(vector2: Vector2) = Vector2(vector2.x, vector2.y)
         fun createRandom(maxX: Int, maxY: Int) =
             Vector2(Random.nextInt(maxX).toFloat(), Random.nextInt(maxY).toFloat())
     }

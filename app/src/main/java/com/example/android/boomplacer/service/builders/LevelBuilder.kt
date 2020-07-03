@@ -9,7 +9,7 @@ import com.example.android.boomplacer.service.factories.BlastFactory
 import com.example.android.boomplacer.service.factories.BombFactory
 import com.example.android.boomplacer.service.factories.TargetFactory
 
-class LevelBuilder() : Builder() {
+class LevelBuilder : Builder() {
     var targetIcon: Bitmap? = null
         get() = field ?: throwPropertyNotSetException(::targetIcon.name)
     var antiTargetIcon: Bitmap? = null

@@ -21,10 +21,16 @@ class ObjectManager {
     val pendingAntiTargets = LinkedList<Target>()
     val inventoryBombs = LinkedList<Bomb>()
 
-    val noBombsOrBlastsOnScreen
-        get() = placedBlasts.isEmpty() && placedBombs.isEmpty()
+    val noBlastsOnScreen
+        get() = placedBlasts.isEmpty()
+    val noBombsOnScreen
+        get() = placedBombs.isEmpty()
     val noTargetsOnScreen
         get() = placedTargets.isEmpty()
+    val isAntiTargetsDestroyed
+        get() = destroyedAntiTargets.isNotEmpty()
+    val noBombsInInventory
+        get() = inventoryBombs.isEmpty()
 
     val targetsCount
         get() = pendingTargets.size + placedTargets.size
@@ -80,7 +86,7 @@ class ObjectManager {
             blast.positionPx = bomb.positionPx
             placedBlasts.add(blast)
         }
-
+        expiredBombs.clear()
     }
 
     /**

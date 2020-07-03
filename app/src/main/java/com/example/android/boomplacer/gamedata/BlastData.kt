@@ -9,18 +9,21 @@ class BlastData {
     companion object {
         const val BASE_SPEED: Float = 0f
         const val BASE_RADIUS: Float = 50f
-        const val BASE_RADIUS_CHANGE_RATE = -(BASE_RADIUS / 2)
 
         val AMOUNT_FORMULA: (difficultyValue: Int) -> Int = { 1 } // single blast type per level
-        val SPEED_FORMULA: (difficultyValue: Int) -> Float = { BASE_SPEED } // static blasts, for now...
+        val SPEED_FORMULA: (difficultyValue: Int) -> Float =
+            { BASE_SPEED } // static blasts, for now...
         val RADIUS_FORMULA: (difficultyValue: Int) -> Float =
             { dif -> BASE_RADIUS - BASE_RADIUS * (dif / 20f) }
         val RADIUS_CHANGE_RATE_FORMULA: (difficultyValue: Int) -> Float =
-            { dif -> BASE_RADIUS_CHANGE_RATE - BASE_RADIUS * (dif / 10f) }
+            { dif ->
+                val radiusDp = RADIUS_FORMULA(dif)
+                -(radiusDp / 2 + radiusDp / 2 * (dif / 10f))
+            }
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
-            listOf(StaticMovePattern(LevelCategory.EASY, 0))
+            listOf(StaticMovePattern(LevelCategory.EASY, 1))
         val AVAILABLE_RADIUS_PATTERNS: List<BlastRadiusPattern> =
-            listOf(LinearDecreaseBlastRadiusPattern(LevelCategory.EASY, 0))
+            listOf(LinearDecreaseBlastRadiusPattern(LevelCategory.EASY, 1))
     }
 }

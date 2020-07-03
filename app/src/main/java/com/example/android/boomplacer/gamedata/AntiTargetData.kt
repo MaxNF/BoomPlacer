@@ -16,6 +16,6 @@ class AntiTargetData {
             { dif -> TargetData.BASE_RADIUS - TargetData.BASE_RADIUS * (dif / 50f) }
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
-            listOf(LinearMovePattern(LevelCategory.EASY, 0))
+            listOf(LinearMovePattern(LevelCategory.EASY, 1))
     }
 }

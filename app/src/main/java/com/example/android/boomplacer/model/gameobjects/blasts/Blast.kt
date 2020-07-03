@@ -2,6 +2,7 @@ package com.example.android.boomplacer.model.gameobjects.blasts
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.util.Log
 import com.example.android.boomplacer.game.ObjectManager
 import com.example.android.boomplacer.math.Vector2
 import com.example.android.boomplacer.model.gameobjects.base.GameObject
@@ -16,7 +17,7 @@ open class Blast constructor(
     positionPx: Vector2,
     movePattern: MovePattern,
     protected val blastRadiusPattern: BlastRadiusPattern
-) : GameObject(null, radiusPx, velocityPx, positionPx, movePattern) {
+) : GameObject(null, radiusPx, velocityPx, positionPx, movePattern), Cloneable {
 
     override fun draw(canvas: Canvas) {
         canvas.drawCircle(positionPx.x, positionPx.y, radiusPx, paint)
@@ -31,4 +32,14 @@ open class Blast constructor(
         blastRadiusPattern.applyPattern(this, secondsElapsed)
         return radiusPx <= 0
     }
+
+    fun getCopy(): Blast = Blast(
+        paint,
+        radiusPx,
+        radiusChangeRate,
+        Vector2.create(velocityPx),
+        Vector2.create(positionPx),
+        movePattern as MovePattern,
+        blastRadiusPattern
+    )
 }

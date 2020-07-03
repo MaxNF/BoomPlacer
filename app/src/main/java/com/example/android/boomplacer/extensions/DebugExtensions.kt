@@ -10,7 +10,7 @@ import com.example.android.boomplacer.model.gameobjects.levels.Level
 import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
 import com.example.android.boomplacer.service.builders.LevelBuilder
 
-fun createDebugLevel(game: Game): Level {
+fun createDebugLevel(game: Game, levelDifficulty: LevelDifficulty): Level {
     val resources = game.context.resources
     return LevelBuilder().apply {
         antiTargetIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_anti_target)
@@ -22,6 +22,6 @@ fun createDebugLevel(game: Game): Level {
         bombIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_bomb)
         fieldWidth = game.width
         fieldHeight = game.height
-        levelDifficulty = LevelDifficulty(LevelCategory.EASY, 0)
+        this.levelDifficulty = levelDifficulty
     }.build()
 }

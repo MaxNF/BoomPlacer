@@ -23,7 +23,7 @@ abstract class GameObjectBuilder<T : GameObject> : Builder() {
     protected val radiusPx: Float
         get() {
             radiusDp?.let {
-                dpToPx(it)
+                return dpToPx(it)
             }
             throwPropertyNotSetException(::radiusDp.name)
         }
@@ -35,7 +35,7 @@ abstract class GameObjectBuilder<T : GameObject> : Builder() {
             angle?.let { angle ->
                 speedDp?.let { speedDp ->
                     val speedPx = dpToPx(speedDp)
-                    Vector2.create(angle, speedPx)
+                    return Vector2.create(angle, speedPx)
                 }
                 throwPropertyNotSetException(::speedDp.name)
             }
@@ -51,9 +51,15 @@ abstract class GameObjectBuilder<T : GameObject> : Builder() {
 
     abstract fun build(): T
 
-    fun build(amount: Int): List<T> {
+    /**
+     * @param changeFunction - function to be invoked on each iteration of creating object.
+     * Can be used to change properties of the builder.
+     * */
+    @Suppress("UNCHECKED_CAST")
+    fun <E : GameObjectBuilder<T>> build(amount: Int, changeFunction: E.() -> Unit): List<T> {
         val list = mutableListOf<T>()
         for (i: Int in 0 until amount) {
+            changeFunction.invoke(this as E)
             list.add(build())
         }
         return list

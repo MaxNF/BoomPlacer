@@ -33,15 +33,17 @@ class BombFactory(private val blastFactory: BlastFactory, bombIcon: Bitmap) :
         val timePatternsPool = createWeightedPatternsPool(availableTimePatterns)
 
         return BombBuilder().apply {
+            unscaledBitmap = icon
             blast = bombBlast
             speedDp = BombData.SPEED_FORMULA(difficultyValue)
             radiusDp = BombData.RADIUS_FORMULA(difficultyValue)
             positionPx = Vector2.zero()
             score = BombData.SCORE_FORMULA(difficultyValue)
             secondsBeforeBlast = BombData.TIME_FORMULA(difficultyValue)
-            angle = randomizeAngle()
             movePattern = movePatternsPool.getRandom() as MovePattern
             bombTimePattern = timePatternsPool.getRandom() as BombTimePattern
-        }.build(BombData.AMOUNT_FORMULA(difficultyValue))
+        }.build<BombBuilder>(BombData.AMOUNT_FORMULA(difficultyValue)) {
+            angle = randomizeAngle()
+        }
     }
 }

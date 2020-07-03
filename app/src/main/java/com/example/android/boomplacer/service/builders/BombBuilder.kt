@@ -20,7 +20,7 @@ class BombBuilder : GameObjectBuilder<Bomb>() {
     override fun build(): Bomb {
         return Bomb(
             scaledBitmap,
-            blast!!,
+            blast!!.getCopy(), // we do not want a single blast with his own state be shared among all bombs
             secondsBeforeBlast!!,
             score!!,
             radiusPx,

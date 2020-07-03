@@ -1,6 +1,7 @@
 package com.example.android.boomplacer.service.factories
 
 import android.graphics.Bitmap
+import com.example.android.boomplacer.extensions.dpToPx
 import com.example.android.boomplacer.extensions.filterForDifficulty
 import com.example.android.boomplacer.gamedata.AntiTargetData
 import com.example.android.boomplacer.gamedata.TargetData
@@ -22,14 +23,20 @@ class AntiTargetFactory(targetIcon: Bitmap, fieldWidth: Int, fieldHeight: Int) :
             TargetData.AVAILABLE_MOVE_PATTERNS.filterForDifficulty(levelDifficulty)
         val movePatternsPool = createWeightedPatternsPool(availableMovePatterns)
 
+        val radiusDp = AntiTargetData.RADIUS_FORMULA(difficultyValue)
+
         return TargetBuilder().apply {
             unscaledBitmap = icon
             score = AntiTargetData.SCORE_FORMULA(difficultyValue)
-            angle = randomizeAngle()
             speedDp = AntiTargetData.SPEED_FORMULA(difficultyValue)
-            radiusDp = AntiTargetData.RADIUS_FORMULA(difficultyValue)
-            positionPx = Vector2.createRandom(fieldWidth, fieldHeight)
+            this.radiusDp = radiusDp
             movePattern = movePatternsPool.getRandom() as MovePattern
-        }.build(AntiTargetData.AMOUNT_FORMULA(difficultyValue))
+        }.build<TargetBuilder>(AntiTargetData.AMOUNT_FORMULA(difficultyValue)) {
+            angle = randomizeAngle()
+            positionPx = Vector2.createRandom(
+                fieldWidth - dpToPx(radiusDp).toInt(),
+                fieldHeight - dpToPx(radiusDp).toInt()
+            )
+        }
     }
 }

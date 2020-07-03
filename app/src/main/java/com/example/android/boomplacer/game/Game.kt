@@ -2,6 +2,7 @@ package com.example.android.boomplacer.game
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
 import com.example.android.boomplacer.model.gameobjects.GameState
@@ -12,6 +13,8 @@ class Game(
     context: Context,
     private val objectManager: ObjectManager
 ) : SurfaceView(context), GameFlow {
+    private val TAG = "Game"
+
     private lateinit var gameLoop: GameLoop
     var targetFramerate: Int = 60
     var showFramerate = false
@@ -77,20 +80,20 @@ class Game(
         updateAntiTargetsState(secondsElapsed)
         objectManager.calculateScore()
 
+        if (shouldPlaceNextTarget()) {
+            objectManager.placeTarget()
+        }
+
         val gameState = calculateGameState()
         if (gameFinished(gameState)) {
             endGame(gameState)
-        }
-
-        if (shouldPlaceNextTarget()) {
-            objectManager.placeTarget()
         }
     }
 
     private fun gameFinished(gameState: GameState) = gameState != GameState.RUNNING
 
     private fun shouldPlaceNextTarget() =
-        objectManager.noBombsOrBlastsOnScreen && objectManager.noTargetsOnScreen
+        objectManager.noBombsOnScreen && objectManager.noBlastsOnScreen && objectManager.noTargetsOnScreen
 
     private fun updateBombsState(secondsElapsed: Float) {
         val iterator = objectManager.placedBombs.iterator()
@@ -138,16 +141,10 @@ class Game(
     }
 
     private fun calculateGameState(): GameState {
-        val anyTargetsLeft =
-            objectManager.pendingTargets.isNotEmpty() || objectManager.placedTargets.isNotEmpty()
-        val anyBombsLeft =
-            objectManager.inventoryBombs.isNotEmpty() || objectManager.placedBombs.isNotEmpty()
-        val anyBlastsProceed = objectManager.placedBlasts.isNotEmpty()
-        val anyAntiTargetsDestroyed = objectManager.destroyedAntiTargets.isNotEmpty()
         return when {
-            anyAntiTargetsDestroyed && !anyBlastsProceed -> GameState.LOSE_ANTI_TARGET_DESTROYED
-            anyTargetsLeft && !anyBombsLeft && !anyBlastsProceed -> GameState.LOSE_NO_BOMBS_LEFT
-            !anyTargetsLeft && !anyBlastsProceed -> GameState.WIN_TARGETS_DESTROYED
+            objectManager.isAntiTargetsDestroyed && objectManager.noBlastsOnScreen -> GameState.LOSE_ANTI_TARGET_DESTROYED
+            objectManager.noTargetsOnScreen && objectManager.noBlastsOnScreen -> GameState.WIN_TARGETS_DESTROYED
+            objectManager.noBombsOnScreen && objectManager.noBombsInInventory && objectManager.noBlastsOnScreen -> GameState.LOSE_NO_BOMBS_LEFT
             else -> GameState.RUNNING
         }
     }
@@ -187,7 +184,7 @@ class Game(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN && objectManager.noBombsOrBlastsOnScreen) {
+        if (event.action == MotionEvent.ACTION_DOWN && objectManager.noBombsOnScreen && objectManager.noBlastsOnScreen) {
             objectManager.placeBomb(event.x, event.y)
         }
         return true
