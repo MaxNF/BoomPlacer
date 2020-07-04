@@ -37,29 +37,21 @@ class ObjectManager {
     val inventoryBombsCount
         get() = inventoryBombs.size
 
-    fun clearScreen() {
+    fun reset() {
         placedTargets.clear()
+        placedAntiTargets.clear()
         placedBombs.clear()
         placedBlasts.clear()
-    }
 
-    fun resetInventory() {
-        inventoryBombs.clear()
-    }
+        destroyedTargets.clear()
+        destroyedAntiTargets.clear()
 
-    fun resetPendingTargets() {
+        expiredBombs.clear()
+
         pendingTargets.clear()
-    }
-
-    fun resetScore() {
+        pendingAntiTargets.clear()
+        inventoryBombs.clear()
         score = 0
-    }
-
-    fun reset() {
-        resetPendingTargets()
-        resetInventory()
-        resetScore()
-        clearScreen()
     }
 
     /**

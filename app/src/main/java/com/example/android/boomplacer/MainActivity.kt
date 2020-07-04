@@ -1,19 +1,11 @@
 package com.example.android.boomplacer
 
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.FrameLayout
-import com.example.android.boomplacer.extensions.createDebugLevel
 import com.example.android.boomplacer.game.Game
 import com.example.android.boomplacer.game.ObjectManager
-import com.example.android.boomplacer.game.UserInterface
-import com.example.android.boomplacer.gamedata.LevelCategory
-import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
-import com.example.android.boomplacer.service.builders.LevelBuilder
+import com.example.android.boomplacer.game.ui.UserInterface
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"

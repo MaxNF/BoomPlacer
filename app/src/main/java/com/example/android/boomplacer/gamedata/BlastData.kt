@@ -14,7 +14,7 @@ class BlastData {
         val SPEED_FORMULA: (difficultyValue: Int) -> Float =
             { BASE_SPEED } // static blasts, for now...
         val RADIUS_FORMULA: (difficultyValue: Int) -> Float =
-            { dif -> BASE_RADIUS - BASE_RADIUS * (dif / 20f) }
+            { dif -> BASE_RADIUS - BASE_RADIUS * (dif / 100f) }
         val RADIUS_CHANGE_RATE_FORMULA: (difficultyValue: Int) -> Float =
             { dif ->
                 val radiusDp = RADIUS_FORMULA(dif)

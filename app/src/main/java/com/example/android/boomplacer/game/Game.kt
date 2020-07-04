@@ -2,11 +2,15 @@ package com.example.android.boomplacer.game
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
+import com.example.android.boomplacer.extensions.createDebugLevel
+import com.example.android.boomplacer.extensions.runOnMainThread
+import com.example.android.boomplacer.game.ui.UserInterface
+import com.example.android.boomplacer.gamedata.LevelData
 import com.example.android.boomplacer.model.gameobjects.GameState
 import com.example.android.boomplacer.model.gameobjects.levels.Level
+import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
 import java.lang.IllegalStateException
 
 class Game(
@@ -20,6 +24,7 @@ class Game(
     var showFramerate = false
 
     private lateinit var userInterface: UserInterface
+    private lateinit var currentDifficulty: LevelDifficulty
 
     fun attachUserInterface(userInterface: UserInterface) {
         this.userInterface = userInterface
@@ -27,6 +32,7 @@ class Game(
 
     override fun startGame() {
         if (::gameLoop.isInitialized) {
+            runOnMainThread(context) { userInterface.updateLevelNumber(currentDifficulty.difficultyOffset + 1) }
             gameLoop.running = true
             objectManager.placeTarget()
             gameLoop.start()
@@ -53,13 +59,33 @@ class Game(
 
     override fun isPaused() = gameLoop.paused
 
-    override fun initNewGame(level: Level) {
+    private fun initNewGame(level: Level) {
         resetGameState()
         addGameObjects(level)
     }
 
+    override fun initNewGameAndStart(levelDifficulty: LevelDifficulty) {
+        currentDifficulty = levelDifficulty
+        val level = createDebugLevel(this, levelDifficulty)
+        initNewGame(level)
+        unPauseGame()
+        startGame()
+    }
+
+    override fun initAndStartNextLevel() {
+        val newDifficulty =
+            LevelDifficulty(currentDifficulty.levelCategory, currentDifficulty.difficultyOffset + 1)
+        currentDifficulty = newDifficulty
+        val level = createDebugLevel(this, newDifficulty)
+        initNewGame(level)
+        unPauseGame()
+        startGame()
+    }
+
     private fun resetGameState() {
-        if (::gameLoop.isInitialized && gameLoop.running) stopGame()
+        if (::gameLoop.isInitialized && gameLoop.running) {
+            stopGame()
+        }
         gameLoop = GameLoop(this)
         objectManager.reset()
         userInterface.reset()
@@ -153,13 +179,17 @@ class Game(
         when (gameState) {
             GameState.WIN_TARGETS_DESTROYED -> {
                 objectManager.calculateFinalScore()
-                userInterface.showWinView()
+                if (currentDifficulty.difficultyOffset == LevelData.FINAL_DIFFICULTY_OFFSET) {
+                    runOnMainThread(context) { userInterface.winCategoryDialog.show() }
+                } else {
+                    runOnMainThread(context) { userInterface.winDialog.show() }
+                }
             }
             GameState.LOSE_ANTI_TARGET_DESTROYED -> {
-                userInterface.showAntiTargetDestroyedView()
+                runOnMainThread(context) { userInterface.loseDialog.show() }
             }
             GameState.LOSE_NO_BOMBS_LEFT -> {
-                userInterface.showNoMoreBombsView()
+                runOnMainThread(context) { userInterface.loseDialog.show() }
             }
             else -> throw IllegalStateException("Unsupported game state for ending the game")
         }
@@ -175,11 +205,13 @@ class Game(
             objectManager.placedTargets.forEach { it.draw(canvas) }
             holder.unlockCanvasAndPost(canvas)
 
-            userInterface.updateUi(
-                objectManager.score,
-                objectManager.inventoryBombsCount,
-                objectManager.targetsCount
-            )
+            runOnMainThread(context) {
+                userInterface.updateUi(
+                    objectManager.score,
+                    objectManager.inventoryBombsCount,
+                    objectManager.targetsCount
+                )
+            }
         }
     }
 

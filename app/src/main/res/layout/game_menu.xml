@@ -30,13 +30,13 @@
             android:id="@+id/button_new_game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start new game" />
+            android:text="New game" />
 
         <Button
             android:id="@+id/button_best_results"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View best results" />
+            android:text="Best results" />
 
         <Button
             android:id="@+id/button_exit"

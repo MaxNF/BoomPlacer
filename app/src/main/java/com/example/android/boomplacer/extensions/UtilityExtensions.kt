@@ -1,6 +1,8 @@
 package com.example.android.boomplacer.extensions
 
+import android.content.Context
 import android.content.res.Resources
+import android.os.Handler
 import com.example.android.boomplacer.model.gameobjects.base.GameObject
 import com.example.android.boomplacer.model.gameobjects.base.Pattern
 import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
@@ -14,4 +16,9 @@ fun dpToPx(dp: Float): Float {
 
 fun pxToDp(px: Int): Float {
     return px / Resources.getSystem().displayMetrics.density
+}
+
+fun runOnMainThread(context: Context, action: () -> Unit) {
+    val handler = Handler(context.mainLooper)
+    handler.post(action)
 }
