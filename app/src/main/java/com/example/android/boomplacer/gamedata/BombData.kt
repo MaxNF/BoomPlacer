@@ -1,6 +1,7 @@
 package com.example.android.boomplacer.gamedata
 
 import android.util.Log
+import com.example.android.boomplacer.R
 import com.example.android.boomplacer.model.gameobjects.bombpatterns.BombTimePattern
 import com.example.android.boomplacer.model.gameobjects.bombpatterns.SimpleBombTimePattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.LinearMovePattern
@@ -9,7 +10,8 @@ import com.example.android.boomplacer.model.gameobjects.movepatterns.StaticMoveP
 
 class BombData {
     companion object {
-        private val TAG = "BombData"
+        const val ICON_DRAWABLE_ID = R.drawable.ic_bomb
+
         const val BASE_SPEED: Float = 0f
         const val BASE_RADIUS: Float = 8f
         const val BASE_TIME_SEC: Float = 0.8f
@@ -18,10 +20,6 @@ class BombData {
             val levelTargetCount = TargetData.AMOUNT_FORMULA(dif)
             val additionalBombs = levelTargetCount - (levelTargetCount * dif / 45f).toInt()
             val totalBombs = levelTargetCount + additionalBombs
-            Log.d(
-                TAG,
-                "target count: $levelTargetCount, total bombs: $totalBombs, additional bombs: $additionalBombs"
-            )
             if (totalBombs < levelTargetCount) {
                 levelTargetCount
             } else {

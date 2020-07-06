@@ -1,10 +1,13 @@
 package com.example.android.boomplacer.gamedata
 
+import com.example.android.boomplacer.R
 import com.example.android.boomplacer.model.gameobjects.movepatterns.LinearMovePattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 
 class AntiTargetData {
     companion object {
+        const val ICON_DRAWABLE_ID = R.drawable.ic_anti_target
+
         const val BASE_SPEED: Float = TargetData.BASE_SPEED
         const val BASE_RADIUS: Float = TargetData.BASE_RADIUS
 

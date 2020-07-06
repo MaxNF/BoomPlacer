@@ -1,14 +1,11 @@
 package com.example.android.boomplacer.game
 
-import com.example.android.boomplacer.model.gameobjects.levels.Level
-import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
+import com.example.android.boomplacer.gamedata.LevelCategory
 
 interface GameFlow {
-    fun startGame()
-    fun stopGame()
+    val gameEvents: GameEvents
     fun pauseGame()
     fun unPauseGame()
-    fun isPaused(): Boolean
-    fun initNewGameAndStart(levelDifficulty: LevelDifficulty)
+    fun initNewGameAndStart(levelCategory: LevelCategory)
     fun initAndStartNextLevel()
 }

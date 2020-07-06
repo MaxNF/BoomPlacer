@@ -1,10 +1,13 @@
 package com.example.android.boomplacer.gamedata
 
+import com.example.android.boomplacer.R
 import com.example.android.boomplacer.model.gameobjects.movepatterns.LinearMovePattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 
 class TargetData {
     companion object {
+        const val ICON_DRAWABLE_ID = R.drawable.ic_target
+
         const val BASE_SPEED: Float = 100f
         const val BASE_RADIUS: Float = 20f
 

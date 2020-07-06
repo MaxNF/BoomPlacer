@@ -12,44 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
-        app:layout_constraintBottom_toTopOf="@id/game_interface_container"
+        app:layout_constraintBottom_toTopOf="@id/indicators"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include
-        layout="@layout/game_interface"
+    <fragment
+        android:id="@+id/game_ui"
+        android:name="com.example.android.boomplacer.ui.UiFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="match_parent" />
 
-    <include
-        layout="@layout/game_menu"
+    <Space
+        android:id="@+id/indicators"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <include
-        layout="@layout/game_level_selector"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <include
-        layout="@layout/game_win_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <include
-        layout="@layout/game_lose_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <include layout="@layout/game_win_category_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
-
+        android:layout_height="@dimen/indicators_height"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,42 +4,36 @@ import android.content.Context
 import android.graphics.Color
 import android.view.MotionEvent
 import android.view.SurfaceView
-import com.example.android.boomplacer.extensions.createDebugLevel
-import com.example.android.boomplacer.extensions.runOnMainThread
-import com.example.android.boomplacer.game.ui.UserInterface
+import com.example.android.boomplacer.gamedata.LevelCategory
 import com.example.android.boomplacer.gamedata.LevelData
 import com.example.android.boomplacer.model.gameobjects.GameState
 import com.example.android.boomplacer.model.gameobjects.levels.Level
 import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
+import com.example.android.boomplacer.service.builders.LevelBuilder
 import java.lang.IllegalStateException
 
 class Game(
     context: Context,
     private val objectManager: ObjectManager
 ) : SurfaceView(context), GameFlow {
-    private val TAG = "Game"
+
+    override val gameEvents = GameEvents()
 
     private lateinit var gameLoop: GameLoop
     var targetFramerate: Int = 60
     var showFramerate = false
 
-    private lateinit var userInterface: UserInterface
     private lateinit var currentDifficulty: LevelDifficulty
 
-    fun attachUserInterface(userInterface: UserInterface) {
-        this.userInterface = userInterface
-    }
-
-    override fun startGame() {
+    private fun startGame() {
         if (::gameLoop.isInitialized) {
-            runOnMainThread(context) { userInterface.updateLevelNumber(currentDifficulty.difficultyOffset + 1) }
             gameLoop.running = true
             objectManager.placeTarget()
             gameLoop.start()
         }
     }
 
-    override fun stopGame() {
+    private fun stopGame() {
         if (::gameLoop.isInitialized) {
             gameLoop.running = false
         }
@@ -57,16 +51,17 @@ class Game(
         }
     }
 
-    override fun isPaused() = gameLoop.paused
+    private fun isPaused() = gameLoop.paused
 
     private fun initNewGame(level: Level) {
         resetGameState()
         addGameObjects(level)
     }
 
-    override fun initNewGameAndStart(levelDifficulty: LevelDifficulty) {
-        currentDifficulty = levelDifficulty
-        val level = createDebugLevel(this, levelDifficulty)
+    override fun initNewGameAndStart(levelCategory: LevelCategory) {
+        val difficulty = LevelDifficulty(levelCategory, 0)
+        currentDifficulty = difficulty
+        val level = createLevel(difficulty)
         initNewGame(level)
         unPauseGame()
         startGame()
@@ -76,10 +71,18 @@ class Game(
         val newDifficulty =
             LevelDifficulty(currentDifficulty.levelCategory, currentDifficulty.difficultyOffset + 1)
         currentDifficulty = newDifficulty
-        val level = createDebugLevel(this, newDifficulty)
+        val level = createLevel(newDifficulty)
         initNewGame(level)
         unPauseGame()
         startGame()
+    }
+
+    private fun createLevel(levelDifficulty: LevelDifficulty): Level {
+        return LevelBuilder(resources).apply {
+            fieldWidth = width
+            fieldHeight = height
+            this.levelDifficulty = levelDifficulty
+        }.build()
     }
 
     private fun resetGameState() {
@@ -88,7 +91,7 @@ class Game(
         }
         gameLoop = GameLoop(this)
         objectManager.reset()
-        userInterface.reset()
+        gameEvents.resetValues()
     }
 
     private fun addGameObjects(level: Level) {
@@ -109,6 +112,13 @@ class Game(
         if (shouldPlaceNextTarget()) {
             objectManager.placeTarget()
         }
+
+        gameEvents.updateValues(
+            objectManager.inventoryBombsCount,
+            objectManager.leftTargetsCount,
+            currentDifficulty.difficultyOffset,
+            objectManager.score
+        )
 
         val gameState = calculateGameState()
         if (gameFinished(gameState)) {
@@ -178,18 +188,18 @@ class Game(
     private fun endGame(gameState: GameState) {
         when (gameState) {
             GameState.WIN_TARGETS_DESTROYED -> {
-                objectManager.calculateFinalScore()
+                val finalScore = objectManager.calculateFinalScore()
                 if (currentDifficulty.difficultyOffset == LevelData.FINAL_DIFFICULTY_OFFSET) {
-                    runOnMainThread(context) { userInterface.winCategoryDialog.show() }
+                    gameEvents.notifyLevelWon(finalScore)
                 } else {
-                    runOnMainThread(context) { userInterface.winDialog.show() }
+                    gameEvents.notifyCategoryWon(finalScore)
                 }
             }
             GameState.LOSE_ANTI_TARGET_DESTROYED -> {
-                runOnMainThread(context) { userInterface.loseDialog.show() }
+                gameEvents.notifyLevelLost()
             }
             GameState.LOSE_NO_BOMBS_LEFT -> {
-                runOnMainThread(context) { userInterface.loseDialog.show() }
+                gameEvents.notifyLevelLost()
             }
             else -> throw IllegalStateException("Unsupported game state for ending the game")
         }
@@ -204,14 +214,6 @@ class Game(
             objectManager.placedBlasts.forEach { it.draw(canvas) }
             objectManager.placedTargets.forEach { it.draw(canvas) }
             holder.unlockCanvasAndPost(canvas)
-
-            runOnMainThread(context) {
-                userInterface.updateUi(
-                    objectManager.score,
-                    objectManager.inventoryBombsCount,
-                    objectManager.targetsCount
-                )
-            }
         }
     }
 

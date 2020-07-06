@@ -1,5 +1,7 @@
 package com.example.android.boomplacer.gamedata
 
+import android.graphics.Color
+import android.graphics.Paint
 import com.example.android.boomplacer.model.gameobjects.blastpatterns.BlastRadiusPattern
 import com.example.android.boomplacer.model.gameobjects.blastpatterns.LinearDecreaseBlastRadiusPattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
@@ -7,6 +9,11 @@ import com.example.android.boomplacer.model.gameobjects.movepatterns.StaticMoveP
 
 class BlastData {
     companion object {
+        val PAINT = Paint().apply {
+            color = Color.RED
+            alpha = 80
+        }
+
         const val BASE_SPEED: Float = 0f
         const val BASE_RADIUS: Float = 50f
 

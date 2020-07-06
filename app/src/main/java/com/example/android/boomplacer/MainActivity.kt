@@ -3,31 +3,30 @@ package com.example.android.boomplacer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
+import androidx.lifecycle.ViewModelProvider
 import com.example.android.boomplacer.game.Game
 import com.example.android.boomplacer.game.ObjectManager
-import com.example.android.boomplacer.game.ui.UserInterface
 
 class MainActivity : AppCompatActivity() {
-    private val TAG = "MainActivity"
-    private lateinit var game: Game
+    private lateinit var viewModel: MainViewModel
     private val objectManager = ObjectManager()
-    private lateinit var userInterface: UserInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        game = Game(this, objectManager)
+        if (!viewModel.gameAttached()) {
+            viewModel.attachGame(Game(this, objectManager))
+        }
+
         val container = findViewById<FrameLayout>(R.id.game_container)
         val params = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT
         )
-        container.addView(game, params)
+        container.addView(viewModel.game, params)
 
-        game.showFramerate = true
-        userInterface = UserInterface(this, game)
-        game.attachUserInterface(userInterface)
-
+        viewModel.game.showFramerate = true
     }
 }

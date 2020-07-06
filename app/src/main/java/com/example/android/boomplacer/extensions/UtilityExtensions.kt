@@ -1,5 +1,6 @@
 package com.example.android.boomplacer.extensions
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.os.Handler
@@ -21,4 +22,8 @@ fun pxToDp(px: Int): Float {
 fun runOnMainThread(context: Context, action: () -> Unit) {
     val handler = Handler(context.mainLooper)
     handler.post(action)
+}
+
+fun exitApplication(activity: Activity) {
+    activity.finishAndRemoveTask()
 }

@@ -52,7 +52,7 @@ class LevelSelector(
     }
 
     private fun startNewGame(levelDifficulty: LevelDifficulty) {
-        gameFlow.initNewGameAndStart(levelDifficulty)
+//        gameFlow.initNewGameAndStart(levelDifficulty)
         hide()
     }
 }

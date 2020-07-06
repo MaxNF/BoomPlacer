@@ -32,7 +32,7 @@ class ObjectManager {
     val noBombsInInventory
         get() = inventoryBombs.isEmpty()
 
-    val targetsCount
+    val leftTargetsCount
         get() = pendingTargets.size + placedTargets.size
     val inventoryBombsCount
         get() = inventoryBombs.size
@@ -115,9 +115,10 @@ class ObjectManager {
         destroyedTargets.clear()
     }
 
-    fun calculateFinalScore() {
+    fun calculateFinalScore(): Int {
         inventoryBombs.forEach { bomb ->
             score += bomb.score
         }
+        return score
     }
 }
