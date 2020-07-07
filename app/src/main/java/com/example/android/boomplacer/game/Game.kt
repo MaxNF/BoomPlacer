@@ -190,9 +190,9 @@ class Game(
             GameState.WIN_TARGETS_DESTROYED -> {
                 val finalScore = objectManager.calculateFinalScore()
                 if (currentDifficulty.difficultyOffset == LevelData.FINAL_DIFFICULTY_OFFSET) {
-                    gameEvents.notifyLevelWon(finalScore)
-                } else {
                     gameEvents.notifyCategoryWon(finalScore)
+                } else {
+                    gameEvents.notifyLevelWon(finalScore)
                 }
             }
             GameState.LOSE_ANTI_TARGET_DESTROYED -> {

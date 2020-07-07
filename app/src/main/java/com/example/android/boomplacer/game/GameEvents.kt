@@ -36,6 +36,7 @@ class GameEvents {
             }
         }
 
+
     private val _bombsChanged = MutableLiveData<Int>()
     val bombsChanged: LiveData<Int> = _bombsChanged
 
@@ -48,14 +49,21 @@ class GameEvents {
     private val _scoreChanged = MutableLiveData<Int>()
     val scoreChanged: LiveData<Int> = _scoreChanged
 
-    private val _levelWon = MutableLiveData<Int>()
-    val levelWon: LiveData<Int> = _levelWon
+    private val _levelWon = MutableLiveData<Unit>()
+    val levelWon: LiveData<Unit> = _levelWon
 
-    private val _categoryWon = MutableLiveData<Int>()
-    val categoryWon: LiveData<Int> = _categoryWon
+    private val _categoryWon = MutableLiveData<Unit>()
+    val categoryWon: LiveData<Unit> = _categoryWon
 
     private val _levelLost = MutableLiveData<Unit>()
     val levelLost: LiveData<Unit> = _levelLost
+
+    init {
+        _bombsChanged.postValue(0)
+        _targetsChanged.postValue(0)
+        _levelChanged.postValue(0)
+        _scoreChanged.postValue(0)
+    }
 
     fun updateValues(bombs: Int, targets: Int, difficultyOffset: Int, score: Int) {
         bombsCount = bombs
@@ -72,11 +80,13 @@ class GameEvents {
     }
 
     fun notifyLevelWon(finalScore: Int) {
-        _levelWon.postValue(finalScore)
+        score = finalScore
+        _levelWon.postValue(Unit)
     }
 
     fun notifyCategoryWon(finalScore: Int) {
-        _categoryWon.postValue(finalScore)
+        score = finalScore
+        _categoryWon.postValue(Unit)
     }
 
     fun notifyLevelLost() {

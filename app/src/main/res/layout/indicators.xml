@@ -67,7 +67,7 @@
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/remaining_targets_image"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="3" />
+            />
 
         <ImageView
             android:id="@+id/remaining_bombs_image"

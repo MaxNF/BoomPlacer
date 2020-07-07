@@ -2,6 +2,7 @@ package com.example.android.boomplacer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.boomplacer.game.Game
@@ -12,9 +13,9 @@ class MainActivity : AppCompatActivity() {
     private val objectManager = ObjectManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         if (!viewModel.gameAttached()) {
             viewModel.attachGame(Game(this, objectManager))

@@ -38,11 +38,17 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    // View Model
+    // ViewModel and Lifecycle Extensions
     def lifecycle_version = "2.2.0"
+    def arch_version = "2.1.0"
+    // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    // Annotation processor
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    // Test helpers for LiveData
+    testImplementation "androidx.arch.core:core-testing:$arch_version"
 
 
 

@@ -1,6 +1,7 @@
 package com.example.android.boomplacer.ui
 
 import android.view.View
+import androidx.lifecycle.LifecycleOwner
 import com.example.android.boomplacer.MainViewModel
 import com.example.android.boomplacer.databinding.FragmentUiBinding
 import com.example.android.boomplacer.gamedata.LevelCategory
