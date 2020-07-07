@@ -3,6 +3,7 @@ package com.example.android.boomplacer.gamedata
 import com.example.android.boomplacer.R
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.CurveMovePattern
+import com.example.android.boomplacer.model.gameobjects.movepatterns.ZigZagMovePattern
 
 class TargetData {
     companion object {
@@ -20,9 +21,9 @@ class TargetData {
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
 //            listOf(LinearMovePattern(LevelCategory.EASY, 1))
-
+//            CurveMovePattern(LevelCategory.EASY, 1, 0.5f)
             listOf(
-                CurveMovePattern(LevelCategory.EASY, 1, 0.5f)
+                ZigZagMovePattern(LevelCategory.EASY, 1, 0.2f)
             )
     }
 }
