@@ -12,12 +12,7 @@ class CurveMovePattern(
 ) : MovePattern(minLevelCategory, patternDifficulty) {
     override fun applyPattern(gameObject: GameObject, secondsElapsed: Float) {
         val angle = angleRadPerSec * secondsElapsed
-        with(gameObject.velocityPx) {
-            val nx = x * cos(angle) - y * sin(angle)
-            val ny = x * sin(angle) + y * cos(angle)
-            x = nx
-            y = ny
-        }
+        gameObject.velocityPx.rotate(angle)
         gameObject.positionPx = gameObject.positionPx + gameObject.velocityPx * secondsElapsed
     }
 }

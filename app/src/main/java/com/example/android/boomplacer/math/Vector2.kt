@@ -35,4 +35,11 @@ class Vector2(var x: Float, var y: Float) {
     fun getAngle(): Float {
         return atan(y / x)
     }
+
+    fun rotate(angleRad: Float) {
+        val nx = x * cos(angleRad) - y * sin(angleRad)
+        val ny = x * sin(angleRad) + y * cos(angleRad)
+        x = nx
+        y = ny
+    }
 }
