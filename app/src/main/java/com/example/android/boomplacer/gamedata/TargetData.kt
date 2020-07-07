@@ -1,8 +1,8 @@
 package com.example.android.boomplacer.gamedata
 
 import com.example.android.boomplacer.R
-import com.example.android.boomplacer.model.gameobjects.movepatterns.LinearMovePattern
 import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
+import com.example.android.boomplacer.model.gameobjects.movepatterns.CurveMovePattern
 
 class TargetData {
     companion object {
@@ -19,6 +19,10 @@ class TargetData {
             { dif -> BASE_RADIUS - BASE_RADIUS * (dif / 100f) }
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
-            listOf(LinearMovePattern(LevelCategory.EASY, 1))
+//            listOf(LinearMovePattern(LevelCategory.EASY, 1))
+
+            listOf(
+                CurveMovePattern(LevelCategory.EASY, 1, 0.5f)
+            )
     }
 }

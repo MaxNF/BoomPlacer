@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.boomplacer.game.Game
 import com.example.android.boomplacer.game.ObjectManager
+import mikera.vectorz.Vector2
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -28,6 +29,5 @@ class MainActivity : AppCompatActivity() {
         )
         container.addView(viewModel.game, params)
 
-        viewModel.game.showFramerate = true
     }
 }

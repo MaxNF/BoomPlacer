@@ -1,15 +1,12 @@
 package com.example.android.boomplacer.math
 
-import kotlin.math.cos
-import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 import kotlin.random.Random
 
 class Vector2(var x: Float, var y: Float) {
     companion object {
         fun zero() = Vector2(0f, 0f)
-        fun create(angle: Float, speed: Float) = Vector2(speed * sin(angle), speed * cos(angle))
+        fun create(angleRad: Float, speed: Float) = Vector2(speed * sin(angleRad), speed * cos(angleRad))
         fun create(vector2: Vector2) = Vector2(vector2.x, vector2.y)
         fun createRandom(maxX: Int, maxY: Int) =
             Vector2(Random.nextInt(maxX).toFloat(), Random.nextInt(maxY).toFloat())
@@ -29,5 +26,13 @@ class Vector2(var x: Float, var y: Float) {
 
     fun distanceTo(vector2: Vector2): Float {
         return sqrt((x - vector2.x).pow(2) + (y - vector2.y).pow(2))
+    }
+
+    fun getMagnitude(): Float {
+        return sqrt(x.pow(2) + y.pow(2))
+    }
+
+    fun getAngle(): Float {
+        return atan(y / x)
     }
 }

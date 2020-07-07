@@ -6,13 +6,14 @@ import com.example.android.boomplacer.model.gameobjects.base.GameObject
 import com.example.android.boomplacer.model.gameobjects.base.Pattern
 import com.example.android.boomplacer.model.gameobjects.levels.LevelDifficulty
 import com.example.android.boomplacer.model.gameobjects.modifiers.Modifiers
+import kotlin.math.PI
 import kotlin.random.Random
 
 abstract class Factory<T : GameObject>(protected val icon: Bitmap?) {
 
     abstract fun create(levelDifficulty: LevelDifficulty): List<T>
 
-    protected open fun randomizeAngle(): Float = Random.nextFloat() * 360
+    protected open fun randomizeAngle(): Float = (Random.nextDouble() * PI * 2).toFloat()
 
     protected open fun createWeightedPatternsPool(availablePatterns: List<Pattern<in T>>): WeightedBag<Pattern<in T>> {
         val weightedBag = WeightedBag<Pattern<in T>>()
