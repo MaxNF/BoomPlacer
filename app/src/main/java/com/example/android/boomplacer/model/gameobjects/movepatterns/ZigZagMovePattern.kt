@@ -18,12 +18,11 @@ class ZigZagMovePattern(
         if (currentZigZagTime > zigZigDurationSec) {
             currentZigZagTime -= zigZigDurationSec
             val angle = if (reversed) {
-                reversed = false
                 -(PI / 2.0).toFloat()
             } else {
-                reversed = true
                 (PI / 2.0).toFloat()
             }
+            reversed = !reversed
             gameObject.velocityPx.rotate(angle)
         }
         gameObject.positionPx += gameObject.velocityPx * secondsElapsed

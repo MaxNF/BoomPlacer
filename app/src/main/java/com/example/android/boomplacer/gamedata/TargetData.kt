@@ -1,9 +1,7 @@
 package com.example.android.boomplacer.gamedata
 
 import com.example.android.boomplacer.R
-import com.example.android.boomplacer.model.gameobjects.movepatterns.MovePattern
-import com.example.android.boomplacer.model.gameobjects.movepatterns.CurveMovePattern
-import com.example.android.boomplacer.model.gameobjects.movepatterns.ZigZagMovePattern
+import com.example.android.boomplacer.model.gameobjects.movepatterns.*
 
 class TargetData {
     companion object {
@@ -19,11 +17,12 @@ class TargetData {
         val RADIUS_FORMULA: (difficultyValue: Int) -> Float =
             { dif -> BASE_RADIUS - BASE_RADIUS * (dif / 100f) }
 
-        val AVAILABLE_MOVE_PATTERNS: List<MovePattern> =
+        val AVAILABLE_MOVE_PATTERNS: List<MovePattern>
+            get() =
 //            listOf(LinearMovePattern(LevelCategory.EASY, 1))
 //            CurveMovePattern(LevelCategory.EASY, 1, 0.5f)
-            listOf(
-                ZigZagMovePattern(LevelCategory.EASY, 1, 0.2f)
-            )
+//            ZigZagMovePattern(LevelCategory.EASY, 1, 0.2f)
+                listOf(SlowFastMovePattern(LevelCategory.EASY, 1, 5f, 1f))
+
     }
 }

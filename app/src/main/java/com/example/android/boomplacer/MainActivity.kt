@@ -2,12 +2,10 @@ package com.example.android.boomplacer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.boomplacer.game.Game
 import com.example.android.boomplacer.game.ObjectManager
-import mikera.vectorz.Vector2
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
