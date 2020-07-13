@@ -19,10 +19,20 @@ class TargetData {
 
         val AVAILABLE_MOVE_PATTERNS: List<MovePattern>
             get() =
-//            listOf(LinearMovePattern(LevelCategory.EASY, 1))
-//            CurveMovePattern(LevelCategory.EASY, 1, 0.5f)
-//            ZigZagMovePattern(LevelCategory.EASY, 1, 0.2f)
-                listOf(SlowFastMovePattern(LevelCategory.EASY, 1, 5f, 1f))
+//                listOf(
+//                    LinearMovePattern(LevelCategory.EASY, 1),
+//                    CurveMovePattern(LevelCategory.EASY, 1, 0.5f),
+//                    ZigZagMovePattern(LevelCategory.EASY, 1, 0.2f),
+//                    SlowFastMovePattern(LevelCategory.EASY, 1, 5f, 1f)
+//                )
 
+                listOf(
+                    LinearMovePattern(LevelCategory.EASY, 1).apply {
+                        combine(
+                            CurveMovePattern(LevelCategory.EASY, 1, 0.5f),
+                            ZigZagMovePattern(LevelCategory.EASY, 1, 0.1f),
+                            SlowFastMovePattern(LevelCategory.EASY, 1, 1f, 1f)
+                        )
+                    })
     }
 }

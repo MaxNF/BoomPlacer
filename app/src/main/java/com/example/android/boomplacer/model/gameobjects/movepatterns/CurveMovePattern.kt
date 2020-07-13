@@ -11,6 +11,7 @@ class CurveMovePattern(
     private val angleRadPerSec: Float // 0.5f is ok
 ) : MovePattern(minLevelCategory, patternDifficulty) {
     override fun applyPattern(gameObject: GameObject, secondsElapsed: Float) {
+        super.applyPattern(gameObject, secondsElapsed)
         val angle = angleRadPerSec * secondsElapsed
         gameObject.velocityPx.rotate(angle)
         gameObject.positionPx = gameObject.positionPx + gameObject.velocityPx * secondsElapsed

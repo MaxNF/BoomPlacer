@@ -15,6 +15,7 @@ class ZigZagMovePattern(
     private var currentZigZagTime: Float = 0f
     private var reversed = false
     override fun applyPattern(gameObject: GameObject, secondsElapsed: Float) {
+        super.applyPattern(gameObject, secondsElapsed)
         if (currentZigZagTime > zigZigDurationSec) {
             currentZigZagTime -= zigZigDurationSec
             val angle = if (reversed) {

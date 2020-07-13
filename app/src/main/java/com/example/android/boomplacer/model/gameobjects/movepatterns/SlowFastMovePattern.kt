@@ -16,6 +16,7 @@ class SlowFastMovePattern(
     private var currentDuration: Float = 0f
     private var accelSpeedPx: Float? = null
     override fun applyPattern(gameObject: GameObject, secondsElapsed: Float) {
+        super.applyPattern(gameObject, secondsElapsed)
         val vel = gameObject.velocityPx
         val mag = vel.getMagnitude()
         val ang = vel.getAngle()

@@ -9,6 +9,7 @@ class StaticMovePattern(
     patternDifficulty: Int
 ) : MovePattern(minLevelCategory, patternDifficulty) {
     override fun applyPattern(gameObject: GameObject, secondsElapsed: Float) {
+        super.applyPattern(gameObject, secondsElapsed)
         // do nothing
     }
 }

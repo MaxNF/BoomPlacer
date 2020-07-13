@@ -13,8 +13,25 @@ abstract class Pattern<T : GameObject>(
         patternDifficulty
     }
 
+    private val subPatterns = mutableListOf<Pattern<T>>()
+
     fun isAvailableInCategory(levelCategory: LevelCategory) =
         levelCategory >= minLevelCategory
 
-    abstract fun applyPattern(gameObject: T, secondsElapsed: Float)
+    /**
+     * Добавляет к паттерну поведение других паттернов.
+     * */
+    fun combine(vararg patterns: Pattern<T>) {
+        subPatterns.addAll(patterns)
+    }
+
+    /**
+     * Применяет паттерн к объекту. Реализация по умолчанию применяет добавленные с помощью метода
+     * combine() паттерны в порядке их добавления.
+     * */
+    open fun applyPattern(gameObject: T, secondsElapsed: Float) {
+        subPatterns.forEach {
+            it.applyPattern(gameObject, secondsElapsed)
+        }
+    }
 }
